@@ -47,3 +47,11 @@ Prior-edition finalist code (official open source, github.com/ogchallenge/ogc) m
 with citation. Current-2026 competitor repos were examined for intelligence only (etharthinas,
 drimdrim2002, blockforge, Dev-angPatil) — no code copied; techniques independently re-derived
 (pairwise memoization from translation invariance; window-destroy from ALNS literature).
+
+## 2026-07-27 ~10:00 KST — Slot A candidate = v2.2-slotA; XBAY default OFF
+Gate flagged 4 instances; solo re-runs proved 3 contention artifacts and 1 real cadence
+regression (prob_11 +18.8% with XBAY on). XBAY default flipped OFF → candidate is
+v2.1 search behavior + drain-hang fix + raw-bbox containment fix + dormant flags
+(KESTREL_LAYER_TRUE, KESTREL_XBAY) — strictly safer than v2.1-frozen, search-identical.
+prob_11 residual deltas shown to be ±12% same-build portfolio timing variance.
+XBAY and layer-true carry to finals as gated experiments.

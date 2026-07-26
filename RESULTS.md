@@ -45,3 +45,21 @@ applied after memo finding; portfolio smoke re-verified (prob_2 @30 s → 3,690,
 Organizer baseline (240 s): prob_1 795,089 · prob_9 2,362,394 · prob_25 823,887.
 Best public 2026 competitor (etharthinas alg4/alg8): prob_1 151,662 · prob_9 106,065 ·
 prob_25 ~744–898 k. Assignment-only floor prob_1: 1,499 (achieved).
+
+## 2026-07-27 Slot-B gate sweep (git 85d75af cand vs v2.1-frozen), 40 × 60 s
+Totals 246,244,956 → 245,523,873 (−0.29%), 0 infeasible, 9 wins / 27 ties / 4 flagged.
+Flagged re-run solo (clean CPU): prob_13 −2.7% (artifact), prob_14 0.0% (artifact),
+prob_32 0.0% (artifact), prob_11 +18.8% REAL (XBAY cadence). prob_11 variance analysis:
+v2.1-frozen scored 46,011 / 52,955 / 56,917 across three contexts (±12% timing variance);
+cand with XBAY=0 → 52,955 (= historical v2 value) → search-equivalent, PASS.
+
+## 2026-07-27 Container gates (ubuntu 24.04, python 3.12.3, shapely 2.1.2)
+GATE L1 in-container: 9,922 cases seed 42 → FA=0, FR=3 (0.14%) — matrix identical to
+local shapely 2.0.7 (no version divergence). Parity battery on v2.2-slotA: running.
+
+## 2026-07-27 Fuzz campaign (tests/fuzz_instances.py) — first blood
+Found + fixed: (1) containment bbox from repaired-union bounds ≠ checker raw-vertex bbox
+(out-of-bay emissions on degenerate shapes; zero training impact, proven); (2) harness
+driver __main__ guard (macOS spawn process bomb — server fork immune; live-validated the
+worker-crash fall-through: 4 dead workers → feasible single-process finish). Post-fix
+smoke: 9/9 OK.
