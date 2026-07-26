@@ -37,8 +37,10 @@ from shapely.ops import unary_union
 # unset this module behaves exactly like the proven v2.1 build.
 LAYER_TRUE = os.environ.get("KESTREL_LAYER_TRUE", "0") == "1"
 # Cross-bay rebalancing destroy operators (workers 1-3 only; worker 0 keeps
-# the legacy v1 schedule regardless).  KESTREL_XBAY=0 disables for A/B tests.
-XBAY = os.environ.get("KESTREL_XBAY", "1") == "1"
+# the legacy v1 schedule regardless).  Default OFF: the 2026-07-27 gate found
+# a reproducible +18.8% regression on prob_11 from the cadence shift
+# (RESULTS.md); enable with KESTREL_XBAY=1 for finals experiments.
+XBAY = os.environ.get("KESTREL_XBAY", "0") == "1"
 
 EPS = 1e-10
 _MOVE_CACHE = {}
