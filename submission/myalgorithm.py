@@ -106,8 +106,19 @@ def _precompute_geometry(prob):
             union = unary_union(layer_polys)
             if not union.is_valid:
                 union = union.buffer(0)
+            # Containment bbox must be the RAW-vertex bounding box over all
+            # layers -- exactly what the checker's Block.bounding_rect uses
+            # (utils.py L365-383).  buffer(0) repair can shrink an invalid
+            # polygon, and a bbox from the repaired union would then admit
+            # placements the checker rejects as out-of-bay.
+            raw_pts = [(float(x) - ref_x, float(y) - ref_y)
+                       for layer in raw_layers for x, y in layer]
+            raw_bbox = (min(p[0] for p in raw_pts),
+                        min(p[1] for p in raw_pts),
+                        max(p[0] for p in raw_pts),
+                        max(p[1] for p in raw_pts))
             block_orients.append(
-                Orient(oi, union, tuple(map(float, union.bounds)),
+                Orient(oi, union, raw_bbox,
                        float(union.area),
                        layers=tuple(indexed_layers),
                        layer_bboxes=tuple(
