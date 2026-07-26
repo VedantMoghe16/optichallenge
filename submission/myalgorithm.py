@@ -36,6 +36,9 @@ from shapely.ops import unary_union
 # of the conservative union-footprint invariant).  Default OFF: with the flag
 # unset this module behaves exactly like the proven v2.1 build.
 LAYER_TRUE = os.environ.get("KESTREL_LAYER_TRUE", "0") == "1"
+# Cross-bay rebalancing destroy operators (workers 1-3 only; worker 0 keeps
+# the legacy v1 schedule regardless).  KESTREL_XBAY=0 disables for A/B tests.
+XBAY = os.environ.get("KESTREL_XBAY", "1") == "1"
 
 EPS = 1e-10
 _MOVE_CACHE = {}
@@ -854,7 +857,7 @@ def _single_reinsert_sweep(prob, geoms, incumbent, deadline, phase,
 
 
 def _ruin_recreate(prob, geoms, incumbent, deadline, rng, iteration,
-                   exact=True, legacy=False):
+                   exact=True, legacy=False, z2_heavy=False):
     n = len(incumbent)
     if n < 4:
         return incumbent
@@ -864,7 +867,12 @@ def _ruin_recreate(prob, geoms, incumbent, deadline, rng, iteration,
     # legacy=True reproduces the proven v1 destroy/repair schedule exactly
     # (portfolio worker 0), so the portfolio can never search worse than the
     # previous submission; other workers explore the extended operator set.
-    method = iteration % (3 if legacy else 4)
+    if legacy:
+        method = iteration % 3
+    elif XBAY:
+        method = iteration % (6 if z2_heavy else 5)
+    else:
+        method = iteration % 4
     if method == 0:
         removed = blame[:q]
     elif method == 1:
@@ -882,7 +890,7 @@ def _ruin_recreate(prob, geoms, incumbent, deadline, rng, iteration,
         removed = candidates[:q]
         if len(removed) < 2:
             removed = rng.sample(list(incumbent), q)
-    else:
+    elif method == 3:
         # Peak-window flush: evict every block entering one bay around a
         # blamed block's entry date and let the repair re-time them jointly.
         # This is the coordinated re-timing move that single-block
@@ -901,6 +909,52 @@ def _ruin_recreate(prob, geoms, incumbent, deadline, rng, iteration,
         window.sort(key=lambda i: abs(incumbent[i]["entry_time"] - center))
         removed = window[:48]
         if len(removed) < 3:
+            removed = blame[:q]
+    elif method == 4:
+        # Preference repatriation: take the highest-blame exiles (blocks not
+        # in their most-preferred bay) plus the occupiers of their preferred
+        # bay around their release window, and let the repair renegotiate
+        # the whole neighborhood with exact w1/w2/w3 deltas.
+        exiles = [
+            i for i in blame
+            if incumbent[i]["bay_id"] != max(
+                range(len(prob["bays"])),
+                key=lambda j: prob["blocks"][i]["bay_preferences"][j])
+        ][:max(3, q // 2)]
+        if not exiles:
+            removed = blame[:q]
+        else:
+            lead = prob["blocks"][exiles[0]]
+            target = max(range(len(prob["bays"])),
+                         key=lambda j: lead["bay_preferences"][j])
+            r0 = int(lead["release_time"])
+            r1 = r0 + int(lead["processing_time"]) * 2
+            occupiers = sorted(
+                (i for i, a in incumbent.items()
+                 if a["bay_id"] == target and i not in exiles
+                 and a["entry_time"] <= r1 and a["exit_time"] >= r0),
+                key=lambda i: abs(incumbent[i]["entry_time"] - r0))
+            removed = (exiles + occupiers)[:max(q, 16)]
+    else:
+        # Z2-balancing (w2-heavy regimes only): drain preference-indifferent
+        # blocks from the most over-loaded bay (in u_j-scaled terms) so the
+        # repair can rebalance workloads at exact marginal cost.
+        bays = prob["bays"]
+        areas = [float(b["width"] * b["height"]) for b in bays]
+        avg = sum(areas) / len(areas)
+        loads = [0.0] * len(bays)
+        for i, a in incumbent.items():
+            loads[a["bay_id"]] += prob["blocks"][i]["workload"]
+        heavy = max(range(len(bays)), key=lambda j: (avg / areas[j]) * loads[j])
+        pool = [i for i, a in incumbent.items() if a["bay_id"] == heavy]
+        pool.sort(key=lambda i: (
+            max(prob["blocks"][i]["bay_preferences"])
+            - sorted(prob["blocks"][i]["bay_preferences"])[-2]
+            if len(bays) > 1 else 0,
+            -prob["blocks"][i]["workload"],
+        ))
+        removed = pool[:q]
+        if len(removed) < 2:
             removed = blame[:q]
 
     partial = {i: a for i, a in incumbent.items() if i not in set(removed)}
@@ -1032,6 +1086,13 @@ def _solve(prob_info, timelimit=60, variant=0, report=None):
         max_release = max((b["release_time"] for b in prob_info["blocks"]),
                           default=0)
         w1_now = float(prob_info.get("weights", {}).get("w1", 1.0))
+        w2_now = float(prob_info.get("weights", {}).get("w2", 1.0))
+        # Regime gate for the Z2-balancing destroy operator: enabled when a
+        # full one-bay imbalance is worth >= ~5 tardy-days (p25/p36/p40-like),
+        # or when tardiness is free (w1 == 0).
+        _mean_load = (sum(b["workload"] for b in prob_info["blocks"])
+                      / max(1, len(prob_info["bays"])))
+        z2_heavy = w2_now * _mean_load > 5.0 * max(w1_now, 1e-9)
         if n_blocks > 160 and max_release > 60:
             fast_modes = (1, 0, 4, 3, 2, 4, 4)
         elif n_blocks > 160 and w1_now < 1000:
@@ -1134,7 +1195,7 @@ def _solve(prob_info, timelimit=60, variant=0, report=None):
                 break
             ruined = _ruin_recreate(
                 prob_info, geoms, best, deadline, rng, phase, exact=True,
-                legacy=(int(variant) == 0),
+                legacy=(int(variant) == 0), z2_heavy=z2_heavy,
             )
             value = _objective(prob_info, ruined)
             if value + 1e-7 < best_obj:
@@ -1240,16 +1301,22 @@ def algorithm(prob_info, timelimit=60):
                     continue
                 if best is None or item[0] < best[0]:
                     best = item
-            for p in workers:
-                if p.is_alive():
-                    p.terminate()
-            while True:
+            # Drain BEFORE terminating: while children are alive (or exited
+            # normally) the queue holds no torn frames.  Draining after
+            # terminate() risks a partial message whose _recv_bytes() blocks
+            # forever (uncatchable hang -> wall-clock overshoot -> -1), so we
+            # never read the queue again once terminate() has been issued.
+            drain_end = time.monotonic() + 0.4
+            while time.monotonic() < drain_end:
                 try:
-                    item = queue.get_nowait()
+                    item = queue.get(timeout=0.05)
                 except Exception:
                     break
                 if best is None or item[0] < best[0]:
                     best = item
+            for p in workers:
+                if p.is_alive():
+                    p.terminate()
             for p in workers:
                 p.join(0.05)
             if best is not None and best[2] and best[2].get("operations"):
