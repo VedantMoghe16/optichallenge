@@ -21,6 +21,7 @@ Only packages listed in the official OGC environment are used.
 from __future__ import annotations
 
 import math
+import os
 import random
 import time
 from dataclasses import dataclass
@@ -31,6 +32,11 @@ from shapely.geometry import Polygon
 from shapely.ops import unary_union
 
 
+# Layer-true feasibility mode (exact per-layer + crane j>=k semantics instead
+# of the conservative union-footprint invariant).  Default OFF: with the flag
+# unset this module behaves exactly like the proven v2.1 build.
+LAYER_TRUE = os.environ.get("KESTREL_LAYER_TRUE", "0") == "1"
+
 EPS = 1e-10
 _MOVE_CACHE = {}
 # Pairwise collision verdicts.  Overlap of polygon P translated to (x, y)
@@ -40,6 +46,12 @@ _MOVE_CACHE = {}
 _PAIR_CACHE = {}
 _PAIR_CACHE_MAX = 800_000
 _ORIENT_CACHE = {}
+# Layer-true verdict caches, keyed by relative displacement like _PAIR_CACHE.
+# _LT_STATIC is symmetric (key normalized); _LT_CRANE is directional
+# (mover, present).  Verdicts are exact shapely results.
+_LT_STATIC = {}
+_LT_CRANE = {}
+_LT_CACHE_MAX = 700_000
 
 
 @dataclass(frozen=True)
@@ -50,6 +62,8 @@ class Orient:
     poly: object
     bbox: tuple[float, float, float, float]
     area: float
+    layers: tuple = ()
+    layer_bboxes: tuple = ()
 
 
 def _polygon(vertices):
@@ -75,12 +89,15 @@ def _precompute_geometry(prob):
             # The statement guarantees layer-0 vertex 0 is the reference point,
             # but subtract it explicitly to remain robust to equivalent inputs.
             ref_x, ref_y = raw_layers[0][0]
-            layer_polys = []
-            for layer in raw_layers:
-                p = _polygon([(float(x) - ref_x, float(y) - ref_y)
-                              for x, y in layer])
-                if p is not None:
-                    layer_polys.append(p)
+            # Indexed layers preserve the physical layer level even if some
+            # polygon is degenerate (None) -- the checker keeps j-indexing and
+            # skips unusable layers per test, and so must we.
+            indexed_layers = [
+                _polygon([(float(x) - ref_x, float(y) - ref_y)
+                          for x, y in layer])
+                for layer in raw_layers
+            ]
+            layer_polys = [p for p in indexed_layers if p is not None]
             if not layer_polys:
                 continue
             union = unary_union(layer_polys)
@@ -88,7 +105,12 @@ def _precompute_geometry(prob):
                 union = union.buffer(0)
             block_orients.append(
                 Orient(oi, union, tuple(map(float, union.bounds)),
-                       float(union.area))
+                       float(union.area),
+                       layers=tuple(indexed_layers),
+                       layer_bboxes=tuple(
+                           tuple(map(float, p.bounds)) if p is not None
+                           else None
+                           for p in indexed_layers))
             )
         result.append(block_orients)
     return result
@@ -158,6 +180,157 @@ def _safe_polygon_position(geom: Orient, x: int, y: int, blockers,
     return True
 
 
+# ---------------------------------------------------------------------------
+# Layer-true feasibility (KESTREL_LAYER_TRUE=1)
+#
+# Exact competition semantics per the official checker (utils.py):
+#   static  : co-present blocks may not overlap at the SAME layer index
+#             (interior area > 0; edge contact legal).
+#   crane   : at mover M's ENTRY or EXIT, M's layer k must be interior-
+#             disjoint from every present block's layer j for all j >= k.
+# Relations tested for a candidate M on [t, e) against blocker B on
+# [bE, bX) overlapping in time (bE < e and bX > t):
+#   R1 static           always
+#   R2 bE <  t          M-mover crane (B present at M's entry)
+#   R3 bE == t          both-direction crane (same-day co-entry: makes every
+#                       Stage-5 listing order of same-day ENTRYs feasible)
+#   R4 t < bE           B-mover crane (B enters during M's stay - reverse)
+#   R5 bX <  e          B-mover crane (B exits during M's stay - reverse)
+#   R6 bX >  e          M-mover crane (B present at M's exit)
+#   R7 bX == e          both-direction crane (same-day co-exit: makes every
+#                       Stage-5 listing order of same-day EXITs feasible)
+# R4/R5 are the reverse-crane checks: placing M must not break OTHER blocks'
+# already-validated lifts occurring inside M's residency.
+# ---------------------------------------------------------------------------
+
+def _lt_layer_overlap(pa, pb):
+    """True iff the two layer polygons overlap with positive interior area."""
+    try:
+        return pa.relate_pattern(pb, "2********")
+    except Exception:
+        return True  # rejecting is the safe direction
+
+
+def _lt_moved_layer(geom: Orient, li: int, x: int, y: int):
+    p = geom.layers[li]
+    if p is None:
+        return None
+    key = (id(p), x, y)
+    moved = _MOVE_CACHE.get(key)
+    if moved is None:
+        moved = _translate(p, xoff=x, yoff=y)
+        if len(_MOVE_CACHE) < 250_000:
+            _MOVE_CACHE[key] = moved
+    return moved
+
+
+def _lt_bb_hit(ba, bb_, dxa, dya, dxb, dyb):
+    """Strict AABB overlap of two layer bboxes under their translations."""
+    return (ba[0] + dxa < bb_[2] + dxb and bb_[0] + dxb < ba[2] + dxa
+            and ba[1] + dya < bb_[3] + dyb and bb_[1] + dyb < ba[3] + dya)
+
+
+def _lt_static_ok(ga: Orient, xa, ya, gb: Orient, xb, yb) -> bool:
+    """Same-index layers of the two placed blocks are interior-disjoint."""
+    ka, kb = id(ga.poly), id(gb.poly)
+    if ka <= kb:
+        key = (ka, kb, xa - xb, ya - yb)
+    else:
+        key = (kb, ka, xb - xa, yb - ya)
+    v = _LT_STATIC.get(key)
+    if v is None:
+        v = True
+        for k in range(min(len(ga.layers), len(gb.layers))):
+            bba, bbb = ga.layer_bboxes[k], gb.layer_bboxes[k]
+            if bba is None or bbb is None:
+                continue
+            if not _lt_bb_hit(bba, bbb, xa, ya, xb, yb):
+                continue
+            pa = _lt_moved_layer(ga, k, xa, ya)
+            pb = _lt_moved_layer(gb, k, xb, yb)
+            if pa is None or pb is None:
+                continue
+            if _lt_layer_overlap(pa, pb):
+                v = False
+                break
+        if len(_LT_STATIC) < _LT_CACHE_MAX:
+            _LT_STATIC[key] = v
+    return v
+
+
+def _lt_crane_ok(gm: Orient, xm, ym, gp: Orient, xp, yp) -> bool:
+    """Mover M can be craned vertically past present block P:
+    M's layer k is interior-disjoint from P's layer j for all j >= k."""
+    key = (id(gm.poly), id(gp.poly), xm - xp, ym - yp)
+    v = _LT_CRANE.get(key)
+    if v is None:
+        v = True
+        n_m, n_p = len(gm.layers), len(gp.layers)
+        for k in range(n_m):
+            if not v:
+                break
+            bbm = gm.layer_bboxes[k]
+            if bbm is None:
+                continue
+            pm = None
+            for j in range(k, n_p):
+                bbp = gp.layer_bboxes[j]
+                if bbp is None:
+                    continue
+                if not _lt_bb_hit(bbm, bbp, xm, ym, xp, yp):
+                    continue
+                if pm is None:
+                    pm = _lt_moved_layer(gm, k, xm, ym)
+                    if pm is None:
+                        break
+                pj = _lt_moved_layer(gp, j, xp, yp)
+                if pj is None:
+                    continue
+                if _lt_layer_overlap(pm, pj):
+                    v = False
+                    break
+        if len(_LT_CRANE) < _LT_CACHE_MAX:
+            _LT_CRANE[key] = v
+    return v
+
+
+def _safe_layers_position(geom: Orient, x: int, y: int, t: int, e: int,
+                          blockers) -> bool:
+    """Exact layer-true feasibility of placing (geom, x, y) on [t, e)."""
+    bb = _moved_bbox(geom, x, y)
+    for a in blockers:
+        if not _bbox_overlap(bb, a["_bbox"]):
+            continue
+        ga = a["_geom"]
+        xa, ya = a["x"], a["y"]
+        if not _lt_static_ok(geom, x, y, ga, xa, ya):            # R1
+            return False
+        bE, bX = a["entry_time"], a["exit_time"]
+        if bE < t:                                               # R2
+            if not _lt_crane_ok(geom, x, y, ga, xa, ya):
+                return False
+        elif bE == t:                                            # R3
+            if not _lt_crane_ok(geom, x, y, ga, xa, ya):
+                return False
+            if not _lt_crane_ok(ga, xa, ya, geom, x, y):
+                return False
+        else:                                                    # R4
+            if not _lt_crane_ok(ga, xa, ya, geom, x, y):
+                return False
+        if bX < e:                                               # R5
+            if not _lt_crane_ok(ga, xa, ya, geom, x, y):
+                return False
+        elif bX == e:                                            # R7
+            if not _lt_crane_ok(geom, x, y, ga, xa, ya):
+                return False
+            if not _lt_crane_ok(ga, xa, ya, geom, x, y):
+                return False
+        else:                                                    # R6
+            if not _lt_crane_ok(geom, x, y, ga, xa, ya):
+                return False
+    return True
+
+
 def _candidate_positions(geom: Orient, bay, blockers, diagonal=False):
     """Corner/contact candidates for irregular bottom-left placement.
 
@@ -186,6 +359,23 @@ def _candidate_positions(geom: Orient, bay, blockers, diagonal=False):
         xs.add(int(math.floor(bx0 - gx1)))
         ys.add(int(math.ceil(by1 - gy0)))
         ys.add(int(math.floor(by0 - gy1)))
+        if LAYER_TRUE:
+            # Layer-true mode legalizes plan-view overlap between different
+            # layers (overhangs), but envelope contacts never propose such
+            # positions.  Add contacts of MY layer-0 box against the
+            # blocker's layer-0 box so mushroom-roofing placements become
+            # reachable; the exact predicate filters the illegal ones.
+            g0 = geom.layer_bboxes[0] if geom.layer_bboxes else None
+            a0 = a["_geom"].layer_bboxes[0] if a["_geom"].layer_bboxes else None
+            if g0 is not None and a0 is not None:
+                ax0 = a0[0] + a["x"]
+                ay0 = a0[1] + a["y"]
+                ax1 = a0[2] + a["x"]
+                ay1 = a0[3] + a["y"]
+                xs.add(int(math.ceil(ax1 - g0[0])))
+                xs.add(int(math.floor(ax0 - g0[2])))
+                ys.add(int(math.ceil(ay1 - g0[1])))
+                ys.add(int(math.floor(ay0 - g0[3])))
 
     xs = [x for x in xs if x_lo <= x <= x_hi]
     ys = [y for y in ys if y_lo <= y <= y_hi]
@@ -423,10 +613,23 @@ def _find_in_bay(prob, geoms, bid, bay_id, others, deadline, diagonal=False,
                     "_bbox": tuple(poly.bounds),
                 }
             positions = _candidate_positions(g, bay, blockers, diagonal)
+            contested = [] if LAYER_TRUE else None
             for k, (x, y) in enumerate(positions):
                 if (k & 127) == 0 and time.monotonic() >= deadline:
                     return None
-                if not _safe_polygon_position(g, x, y, blockers, exact=exact):
+                if LAYER_TRUE:
+                    # Entry-day dominance: prefer union-free positions (the
+                    # proven v2.1 behavior, cheap and LIFO-free).  Contested
+                    # positions -- legal only under the exact layer/crane
+                    # predicate, e.g. overhang roofing -- are deferred and
+                    # used only when day t offers no union-free position,
+                    # i.e. exactly when they buy a strictly earlier entry.
+                    if not _safe_polygon_position(g, x, y, blockers,
+                                                  exact=True):
+                        if len(contested) < 96:
+                            contested.append((x, y))
+                        continue
+                elif not _safe_polygon_position(g, x, y, blockers, exact=exact):
                     continue
                 bb = _moved_bbox(g, x, y)
                 if exact:
@@ -454,6 +657,23 @@ def _find_in_bay(prob, geoms, bid, bay_id, others, deadline, diagonal=False,
                     # optimal for the compactness tie-break.
                     if compact[0] <= g.bbox[3] - g.bbox[1] + EPS:
                         break
+            if LAYER_TRUE and exact and contested:
+                # No union-free position for this orientation at day t: try
+                # the deferred contested positions under the exact layer
+                # predicate (an accept here strictly beats waiting a day).
+                for (x, y) in contested:
+                    if time.monotonic() >= deadline:
+                        return None
+                    if _safe_layers_position(g, x, y, int(t), int(exit_t),
+                                             blockers):
+                        poly = _translate(g.poly, xoff=x, yoff=y)
+                        return {
+                            "block_id": bid, "bay_id": bay_id,
+                            "x": int(x), "y": int(y), "orient_idx": g.idx,
+                            "entry_time": int(t), "exit_time": int(exit_t),
+                            "_geom": g, "_poly": poly,
+                            "_bbox": tuple(poly.bounds),
+                        }
             if best is not None and best[0][0] <= g.bbox[3] - g.bbox[1] + EPS:
                 break
         if best is not None:
@@ -772,6 +992,8 @@ def _solve(prob_info, timelimit=60, variant=0, report=None):
         _MOVE_CACHE.clear()
         _PAIR_CACHE.clear()
         _ORIENT_CACHE.clear()
+        _LT_STATIC.clear()
+        _LT_CRANE.clear()
         geoms = _precompute_geometry(prob_info)
         if any(not gs for gs in geoms):
             raise ValueError("degenerate block geometry")

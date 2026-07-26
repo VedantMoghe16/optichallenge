@@ -1,0 +1,30 @@
+# OGC 2026 server-parity image: Ubuntu 24.04 + python3.12 (native apt) + shapely 2.1.2
+# Matches the competition server (Ubuntu 24.04, py3.12, shapely 2.1.2, 4 cores, 16 GB).
+# No conda on purpose: apt python3 on noble IS 3.12, keeps the build fast.
+FROM ubuntu:24.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        python3 \
+        python3-venv \
+        python3-pip \
+        procps \
+    && rm -rf /var/lib/apt/lists/*
+
+# venv so pip versions are exact and isolated from the distro python
+RUN python3 -m venv /opt/venv \
+    && /opt/venv/bin/pip install --no-cache-dir --upgrade pip \
+    && /opt/venv/bin/pip install --no-cache-dir shapely==2.1.2 numpy
+
+ENV PATH="/opt/venv/bin:${PATH}"
+
+WORKDIR /work
+
+# Battery script + helpers baked into the image at /work; the repo itself is
+# volume-mounted read-only at /repo by run_parity.sh (build context = docker/).
+COPY parity_battery.sh parity_driver.py gen_edge_cases.py parity_summary.py /work/
+
+RUN chmod +x /work/parity_battery.sh
+
+CMD ["bash", "/work/parity_battery.sh"]
