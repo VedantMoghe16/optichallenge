@@ -1,0 +1,45 @@
+[Greedy] Instance : prob_25
+[Greedy] Bays     : 2  |  Blocks : 100  |  Timelimit : 240.0s
+[Greedy] Weights  : w1=667  w2=1  w3=20
+[Greedy] --------------------------------------------------------
+[Greedy]   bay[0]  151x29
+[Greedy]   bay[1]  63x27
+[Greedy] --------------------------------------------------------
+[Greedy] Phase 1 : EDD greedy placement ...
+[Greedy]     10/100  block51   -> bay1 (18,10) oi=3  t=[6,22)  loads=[b0=115 b1=291]  fallback=0  0.3s
+[Greedy]     20/100  block60   -> bay1 (62,10) oi=2  t=[8,33)  loads=[b0=510 b1=707]  fallback=0  3.4s
+[Greedy]     30/100  block79   -> bay0 (58,1) oi=0  t=[25,40)  loads=[b0=992 b1=905]  fallback=0  9.3s
+[Greedy]     40/100  block89   -> bay0 (74,16) oi=5  t=[18,41)  loads=[b0=1676 b1=1000]  fallback=0  21.1s
+[Greedy]     50/100  block85   -> bay1 (55,1) oi=0  t=[27,48)  loads=[b0=2289 b1=1225]  fallback=0  38.5s
+[Greedy]     60/100  block4    -> bay1 (0,9) oi=4  t=[39,53)  loads=[b0=2884 b1=1380]  fallback=0  56.6s
+[Greedy]     70/100  block13   -> bay0 (20,0) oi=0  t=[41,63)  loads=[b0=3703 b1=1805]  fallback=0  81.6s
+[Greedy]     80/100  block86   -> bay1 (11,0) oi=6  t=[46,63)  loads=[b0=4490 b1=1947]  fallback=0  115.4s
+[Greedy]     90/100  block39   -> bay0 (111,18) oi=6  t=[64,89)  loads=[b0=5534 b1=2135]  fallback=0  155.2s
+[Greedy]    100/100  block26   -> bay0 (61,18) oi=6  t=[68,98)  loads=[b0=6817 b1=2179]  fallback=0  181.2s
+[Greedy] Phase 1 done  |  placed=100  bay0=6817  bay1=2179  elapsed=181.25s
+[Greedy] --------------------------------------------------------
+[Greedy] Phase 2 : repair  mode=greedy
+[Greedy] Repair pass 1: 1 violation(s)  stage=2  elapsed=181.3s
+[Greedy]   repair   1/1  block89   [time]  bay1 (19,0)  N/A -> [77,100)  elapsed=185.3s
+[Greedy] Repair pass 2: 10 violation(s)  stage=3  elapsed=185.3s
+[Greedy]   repair   1/10  block18   [time]  bay1 (13,17)  N/A -> [6,28)  elapsed=199.0s
+[Greedy]   repair   2/10  block29   [time]  bay0 (77,29)  N/A -> [10,34)  elapsed=204.6s
+[Greedy]   repair   3/10  block50   [time]  bay0 (77,1)  N/A -> [31,54)  elapsed=210.9s
+[Greedy]   repair   4/10  block85   [time]  bay1 (55,1)  N/A -> [32,53)  elapsed=220.9s
+[Greedy]   repair   5/10  block73   [forced]  bay1 (20,0)  N/A -> [100,117)  elapsed=220.9s
+[Greedy]   repair   6/10  block83   [forced]  bay0 (0,0)  N/A -> [98,123)  elapsed=220.9s
+[Greedy]   repair   7/10  block64   [forced]  bay1 (0,1)  N/A -> [117,142)  elapsed=220.9s
+[Greedy]   repair   8/10  block57   [forced]  bay1 (9,0)  N/A -> [142,167)  elapsed=220.9s
+[Greedy]   repair   9/10  block45   [forced]  bay1 (0,0)  N/A -> [167,182)  elapsed=220.9s
+[Greedy]   repair  10/10  block87   [forced]  bay1 (19,0)  N/A -> [182,204)  elapsed=220.9s
+[Greedy] Repair pass 3: 2 violation(s)  stage=5  elapsed=220.9s
+[Greedy]   repair   1/1  block55   [forced]  bay0 (23,1)  N/A -> [123,151)  elapsed=220.9s
+[Greedy] Repair done  |  feasible  obj=823887  forced=7  elapsed=221.0s
+[Greedy] --------------------------------------------------------
+[Greedy] Done  |  assigned=100/100  elapsed=220.99s
+[Greedy] Objective : 823887  (obj1=1192.0  obj2=463.0  obj3=1418.0)
+Instance : prob_25
+Elapsed  : 221.025s
+Assigned : 100 / 100 blocks
+Feasible : True  (stage=5)
+Objective: 823887.00  (obj1=1192.0, obj2=463.0, obj3=1418.0)

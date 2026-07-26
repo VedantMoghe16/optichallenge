@@ -1,0 +1,11 @@
+{"instance": "prob_1", "samples": 10000, "accepted": 7048, "false_accept": 0, "false_reject": 0, "examples": []}
+{"instance": "prob_4", "samples": 10000, "accepted": 6922, "false_accept": 0, "false_reject": 0, "examples": []}
+{"instance": "prob_9", "samples": 10000, "accepted": 6615, "false_accept": 0, "false_reject": 0, "examples": []}
+{"instance": "prob_20", "samples": 10000, "accepted": 6832, "false_accept": 0, "false_reject": 0, "examples": []}
+{"instance": "prob_21", "samples": 10000, "accepted": 6444, "false_accept": 0, "false_reject": 0, "examples": []}
+{"instance": "prob_25", "samples": 10000, "accepted": 6734, "false_accept": 0, "false_reject": 0, "examples": []}
+{"instance": "prob_27", "samples": 10000, "accepted": 6366, "false_accept": 0, "false_reject": 0, "examples": []}
+{"instance": "prob_32", "samples": 10000, "accepted": 6409, "false_accept": 0, "false_reject": 0, "examples": []}
+{"instance": "prob_38", "samples": 10000, "accepted": 6714, "false_accept": 0, "false_reject": 0, "examples": []}
+{"instance": "prob_40", "samples": 10000, "accepted": 6223, "false_accept": 0, "false_reject": 0, "examples": []}
+{"total": 100000, "false_accept": 0, "false_reject": 0}
