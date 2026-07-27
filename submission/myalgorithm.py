@@ -21,7 +21,6 @@ Only packages listed in the official OGC environment are used.
 from __future__ import annotations
 
 import math
-import os
 import random
 import time
 from dataclasses import dataclass
@@ -32,17 +31,31 @@ from shapely.geometry import Polygon
 from shapely.ops import unary_union
 
 
+# ---------------------------------------------------------------------------
+# Dev switches.  These are plain module constants on purpose: the submitted
+# build must behave identically no matter what the evaluation environment has
+# in os.environ, so nothing here reads the environment.  To experiment, edit
+# the single line (False -> True) and re-run the gate.
+# ---------------------------------------------------------------------------
 # Layer-true feasibility mode (exact per-layer + crane j>=k semantics instead
 # of the conservative union-footprint invariant).  Default OFF: with the flag
-# unset this module behaves exactly like the proven v2.1 build.
-LAYER_TRUE = os.environ.get("KESTREL_LAYER_TRUE", "0") == "1"
+# off this module behaves exactly like the proven v2.1 build.
+LAYER_TRUE = False
 # Cross-bay rebalancing destroy operators (workers 1-3 only; worker 0 keeps
 # the legacy v1 schedule regardless).  Default OFF: the 2026-07-27 gate found
 # a reproducible +18.8% regression on prob_11 from the cadence shift
-# (RESULTS.md); enable with KESTREL_XBAY=1 for finals experiments.
-XBAY = os.environ.get("KESTREL_XBAY", "0") == "1"
+# (RESULTS.md).
+XBAY = False
 
 EPS = 1e-10
+# Smallest side length of the positive-area stand-in used when an orientation's
+# layer polygons are all degenerate (see _proxy_orient).
+DEGEN_MIN_SIDE = 1e-3
+# Cell budget for the row-bitmask placement grid in _rectangle_position.  The
+# supplied contract keeps bays at most 179 x 29 (~5.2e3 cells); the cap only
+# guards hypothetical finals instances with huge bays, where one Python int per
+# grid row would cost time and memory in every one of the four workers.
+RECT_GRID_MAX_CELLS = 2_000_000
 _MOVE_CACHE = {}
 # Pairwise collision verdicts.  Overlap of polygon P translated to (x, y)
 # with polygon Q translated to (u, v) depends only on (P, Q, x-u, y-v), so
@@ -71,6 +84,23 @@ class Orient:
     layer_bboxes: tuple = ()
 
 
+def _dwell(block) -> int:
+    """Integer bay residence used for every derived EXIT time.
+
+    Stage 1 of the checker only requires ``exit_time - entry_time >=
+    processing_time`` (utils.py L1126-1130), so a *longer* dwell is always
+    feasible.  A dwell of 0 is not: ``_emit`` would put the block's EXIT and
+    ENTRY under the same time key with EXIT first (mandatory ordering), and the
+    Stage-5 replay then reports "EXIT block i is not present in bay"
+    (utils.py L1367).  Clamping to >= 1 keeps every emitted schedule
+    replayable.  ``ceil`` additionally covers a hypothetical fractional
+    processing_time, which a bare ``int()`` would truncate below the Stage-1
+    bound.
+    """
+    p = float(block["processing_time"])
+    return max(1, int(math.ceil(p - 1e-9)))
+
+
 def _polygon(vertices):
     if len(vertices) < 3:
         return None
@@ -83,13 +113,70 @@ def _polygon(vertices):
         return None
 
 
-def _precompute_geometry(prob):
+def _proxy_orient(oi, raw_layers) -> Orient:
+    """Positive-area stand-in for an orientation with no usable layer polygon.
+
+    Degenerate layers (fewer than three vertices, collinear, or zero area)
+    are dropped by ``_polygon``; an orientation whose every layer is degenerate
+    would otherwise vanish, and a block whose every orientation vanishes would
+    abort the whole run.  The proxy is the RAW-vertex bounding box over all
+    layers -- exactly the rectangle the checker itself reasons about for
+    containment (``Block.bounding_rect``, utils.py L365-383) -- dilated to a
+    tiny positive extent when that box is itself degenerate.  Because the
+    rectangle covers the true (sub-)geometry, every placement the solver
+    admits under it is still accepted by the checker, which keeps using the
+    raw vertices and remains authoritative.
+    """
+    pts = [(float(x), float(y)) for layer in raw_layers for x, y in layer]
+    if raw_layers and raw_layers[0]:
+        ref_x, ref_y = float(raw_layers[0][0][0]), float(raw_layers[0][0][1])
+    elif pts:
+        ref_x, ref_y = pts[0]
+    else:
+        ref_x = ref_y = 0.0
+    rel = [(px - ref_x, py - ref_y) for px, py in pts] or [(0.0, 0.0)]
+    x0 = min(p[0] for p in rel)
+    y0 = min(p[1] for p in rel)
+    x1 = max(p[0] for p in rel)
+    y1 = max(p[1] for p in rel)
+    if x1 - x0 < DEGEN_MIN_SIDE:
+        x1 = x0 + DEGEN_MIN_SIDE
+    if y1 - y0 < DEGEN_MIN_SIDE:
+        y1 = y0 + DEGEN_MIN_SIDE
+    poly = Polygon([(x0, y0), (x1, y0), (x1, y1), (x0, y1)])
+    bbox = (x0, y0, x1, y1)
+    n = max(1, len(raw_layers))
+    return Orient(oi, poly, bbox, float(poly.area),
+                  layers=tuple([poly] * n),
+                  layer_bboxes=tuple([bbox] * n))
+
+
+def _precompute_geometry(prob, deadline=None):
+    """Per-block orientation geometry.
+
+    ``deadline`` makes preprocessing itself wall-clock aware: once the clock
+    passes it, remaining blocks get raw-bbox rectangle proxies instead of
+    exact polygon unions.  Proxies are strictly more conservative than the
+    true union, so the resulting placements stay checker-legal; this bounds
+    the fixed cost on very short time limits, where the exact build alone can
+    consume the whole budget.
+    """
     result = []
+    rushed = False
     for block in prob["blocks"]:
+        if (deadline is not None and not rushed
+                and time.monotonic() >= deadline):
+            rushed = True
         block_orients = []
-        for oi, shape in enumerate(block["shape"]):
-            raw_layers = [layer for layer in shape["layers"] if layer]
+        degenerate = []
+        shapes = block.get("shape") or []
+        for oi, shape in enumerate(shapes):
+            raw_layers = [layer for layer in (shape.get("layers") or [])
+                          if layer]
             if not raw_layers:
+                continue
+            if rushed:
+                block_orients.append(_proxy_orient(oi, raw_layers))
                 continue
             # The statement guarantees layer-0 vertex 0 is the reference point,
             # but subtract it explicitly to remain robust to equivalent inputs.
@@ -104,6 +191,9 @@ def _precompute_geometry(prob):
             ]
             layer_polys = [p for p in indexed_layers if p is not None]
             if not layer_polys:
+                # Every layer of this orientation is degenerate.  Remember it
+                # in case NO orientation of this block survives.
+                degenerate.append((oi, raw_layers))
                 continue
             union = unary_union(layer_polys)
             if not union.is_valid:
@@ -128,6 +218,18 @@ def _precompute_geometry(prob):
                            else None
                            for p in indexed_layers))
             )
+        if not block_orients:
+            # A block with zero orientations is unplaceable and used to abort
+            # the entire solve ("degenerate block geometry").  Substituting a
+            # conservative proxy keeps the block -- and therefore the whole
+            # run -- alive; the checker still validates against raw vertices.
+            for oi, raw_layers in degenerate:
+                block_orients.append(_proxy_orient(oi, raw_layers))
+        if not block_orients:
+            # No layer data at all.  Emit a minimal proxy per declared
+            # orientation so downstream code never sees an empty list.
+            for oi in range(max(1, len(shapes))):
+                block_orients.append(_proxy_orient(oi, []))
         result.append(block_orients)
     return result
 
@@ -428,7 +530,15 @@ def _rectangle_position(geom: Orient, bay, blockers, diagonal=False):
     if x_lo > x_hi or y_lo > y_hi:
         return None
     nx = x_hi - x_lo + 1
-    rows = [0] * (y_hi - y_lo + 1)
+    ny = y_hi - y_lo + 1
+    if nx * ny > RECT_GRID_MAX_CELLS:
+        # One Python big-int per grid row: build cost and peak memory both
+        # scale with bay_width * bay_height, and the price is paid in all four
+        # portfolio workers.  Above the cap decline the bitmask model; the
+        # caller then relies on the polygon candidate path, whose cost depends
+        # on the blocker count rather than on the bay dimensions.
+        return None
+    rows = [0] * ny
     for a in blockers:
         bx0, by0, bx1, by1 = a["_bbox"]
         # Strict AABB overlap:
@@ -520,8 +630,15 @@ def _imbalance(prob, loads):
     return math.floor(max(scaled) - min(scaled))
 
 
-def _serial_fallback(prob, geoms):
-    """Fast, structurally feasible incumbent available before optimization."""
+def _serial_fallback(prob, geoms, deadline=None):
+    """Fast, structurally feasible incumbent available before optimization.
+
+    ``deadline`` bounds the fixed cost on very short time limits: past it the
+    per-block bay choice stops scoring every bay and simply takes the first
+    fitting one.  The schedule is still complete and structurally feasible
+    (per bay the residence intervals are serial and disjoint), which is what
+    the incumbent is for; only its quality degrades.
+    """
     n_bays = len(prob["bays"])
     ends = [0] * n_bays
     assignments = {}
@@ -535,14 +652,19 @@ def _serial_fallback(prob, geoms):
     for bid in order:
         block = prob["blocks"][bid]
         choices = []
-        old_imb = _imbalance(prob, loads)
+        rushed = deadline is not None and time.monotonic() >= deadline
+        old_imb = 0 if rushed else _imbalance(prob, loads)
         for j, bay in enumerate(prob["bays"]):
             fitting = _orientation_order_cached(geoms, bid, j, bay)
             if not fitting:
                 continue
             g = fitting[0]
             entry = max(int(block["release_time"]), ends[j])
-            exit_t = entry + int(block["processing_time"])
+            exit_t = entry + _dwell(block)
+            if rushed:
+                choices.append((0.0, entry,
+                                -block["bay_preferences"][j], j, g))
+                break
             new_loads = loads.copy()
             new_loads[j] += block["workload"]
             score = (
@@ -557,7 +679,7 @@ def _serial_fallback(prob, geoms):
             raise ValueError("Instance contains an unplaceable block")
         _, entry, _, j, g = min(choices, key=lambda q: q[:4])
         x, y = _minimum_position(g)
-        exit_t = entry + int(block["processing_time"])
+        exit_t = entry + _dwell(block)
         poly = _translate(g.poly, xoff=x, yoff=y)
         a = {
             "block_id": bid, "bay_id": j, "x": x, "y": y,
@@ -584,7 +706,7 @@ def _find_in_bay(prob, geoms, bid, bay_id, others, deadline, diagonal=False,
     """Earliest feasible placement in one bay, or None on timeout/no fit."""
     block = prob["blocks"][bid]
     bay = prob["bays"][bay_id]
-    proc = int(block["processing_time"])
+    proc = _dwell(block)
     fitting = _orientation_order_cached(geoms, bid, bay_id, bay)
     if not fitting:
         return None
@@ -1061,18 +1183,36 @@ def _solve(prob_info, timelimit=60, variant=0, report=None):
         _ORIENT_CACHE.clear()
         _LT_STATIC.clear()
         _LT_CRANE.clear()
-        geoms = _precompute_geometry(prob_info)
+        # Preprocessing (geometry build + serial fallback + its official
+        # check) is a fixed cost that used to ignore the clock entirely: at
+        # timelimit=0.05 with n=100 the call returned only after ~0.33 s.
+        # Half of the usable budget is a generous ceiling -- on the supplied
+        # instances the exact build needs ~0.3 s against a 28 s ceiling at
+        # timelimit=60, so nothing here changes for a normal run.
+        prep_deadline = start + max(0.01, 0.50 * (deadline - start))
+        geoms = _precompute_geometry(prob_info, prep_deadline)
         if any(not gs for gs in geoms):
             raise ValueError("degenerate block geometry")
 
-        fallback = _serial_fallback(prob_info, geoms)
-        ok, best_sol, best_result = _official_check(prob_info, fallback)
-        if not ok:
-            # This should only occur for a malformed instance; allowing the
-            # outer fallback path to run is safer than returning a known failure.
-            raise ValueError("serial fallback rejected by checker")
+        fallback = _serial_fallback(prob_info, geoms, prep_deadline)
+        if time.monotonic() < prep_deadline:
+            ok, best_sol, best_result = _official_check(prob_info, fallback)
+            if not ok:
+                # This should only occur for a malformed instance; allowing the
+                # outer fallback path to run is safer than returning a known
+                # failure.
+                raise ValueError("serial fallback rejected by checker")
+            best_obj = float(best_result["objective"])
+        else:
+            # Budget already gone.  The serial fallback is feasible by
+            # construction -- per bay the residences are serial and disjoint
+            # (so no crane or collision interaction exists), every orientation
+            # was pre-filtered by _fits for bay containment, and _emit lists
+            # EXIT before ENTRY -- so emit it unverified rather than overrun
+            # the limit inside the O(n^2) checker.
+            best_sol = _emit(fallback)
+            best_obj = _objective(prob_info, fallback)
         best = fallback
-        best_obj = float(best_result["objective"])
 
         def _notify():
             if report is not None:
@@ -1243,8 +1383,9 @@ def _solve(prob_info, timelimit=60, variant=0, report=None):
             if "best_sol" in locals() and best_sol is not None:
                 obj = best_obj if "best_obj" in locals() else float("inf")
                 return obj, best_sol
-            geoms = _precompute_geometry(prob_info)
-            return float("inf"), _emit(_serial_fallback(prob_info, geoms))
+            geoms = _precompute_geometry(prob_info, start + 0.75 * limit)
+            return float("inf"), _emit(
+                _serial_fallback(prob_info, geoms, start + 0.85 * limit))
         except Exception:
             return float("inf"), {"operations": {}}
 
