@@ -1,13 +1,57 @@
-# SESSION EVIDENCE REPORT — every measurement from the 2026-07-27 shell session
-*Companion to `TONIGHT-SUBMISSION-PLAN.md` (the action plan). This file is the
-complete measured record backing every decision, for GPT-5.6 to execute from.
-Every number here came from running code in this repo; objectives are from the
-official checker `ogc2026/baseline/utils.py` unless marked otherwise. Git
-branch `finals`, latest commit at writing `ed17583`; shipped submission is tag
-`v2.2-slotA` (zip sha256 d9e581d8bdee3279818f4402b8122d6858ff5444014be528a404c492d95db96a).*
+# SESSION EVIDENCE REPORT — handoff to the scheduling/LNS track
+*For the teammate who requested the full_compare provenance package, and for
+the GPT-5.6 session executing on their behalf. This is the complete measured
+record from the 2026-07-27 shell session (Claude track). Companion action plan:
+`TONIGHT-SUBMISSION-PLAN.md`. Repo branch `finals` on
+github.com/VedantMoghe16/optichallenge (private). Objectives are from the
+official checker `ogc2026/baseline/utils.py` unless marked otherwise.*
 
 ---
 
+## 0. Direct answers to your requested items
+
+| you asked for | answer |
+|---|---|
+| Commit hash containing the completed comparison | **`ed17583`** (this report itself is `da89965`+) |
+| Log ends with FULL_COMPARE_DONE | **Confirmed** — `experiments/results/full_compare_COMPLETE_60runs.log`, last line `FULL_COMPARE_DONE` |
+| All 120 expected JSON result files present | **Confirmed** — 60 kestrel + 60 raster under `experiments/results/full_compare_json/{kestrel,raster}/` |
+| Final Phase-60 total | kestrel **227,458,029** vs raster 252,861,564 (**+11.17%**) |
+| Final Phase-240 total | kestrel 216,974,102 vs raster **212,603,809** (**−2.01%**) |
+| Infeasible / failed / missing runs | **NONE** — 120/120 clean, all `feas=True/True` |
+| Per-instance wins/regressions prob_21–40 | complete table in §9 below |
+
+## 0.5 Your two goals, resolved
+
+**A. Selective-raster activation rule — FINAL, data-backed by all 60 runs:**
+```
+if n_blocks <= 160:                      -> legacy exact shapely scan (unchanged)
+elif remaining_budget >= 1.6 * est_pass_cost and not (preference_locked or z2_heavy):
+                                         -> raster batch construction
+                                            (on a miss at a time point, FALL
+                                            THROUGH to the legacy scan)
+else:                                    -> legacy rectangle path (unchanged)
+
+est_pass_cost ≈ 83 s * (n/250) * (avg_bay_cells/3270)      # measured @ n=250
+preference_locked / z2_heavy: prob_34/36-class (tiny w1)   # optional guard:
+    they were the only n>=200 losses, +2.4% and +5.6%
+```
+Evidence: §9 — the boundary is razor-sharp (ALL ten n≤150 congested instances
+regress +20…+104%; seven of ten n≥200 win, up to −45.1% on prob_35). Selective
+aggregate ≈ −14.7% on the seven winners, ~0 elsewhere.
+
+**B. Frozen baseline for scheduling/LNS development — designated:**
+- Code: branch `finals` at **`ed17583`**, file `submission/myalgorithm.py`
+  (the hardened build: v2.2 search behavior + P=0/degenerate/huge-bay/deadline
+  hardening; paired 40-gate vs shipped v2.2: +0.09%, 0 infeasible → PASS).
+- Reference numbers your LNS work must beat (paired, un-contended, 60 s):
+  **total 226,420,836**, per-instance in
+  `experiments/results/paired_gate_hardening.log`.
+- The SHIPPED artifact stays tag `v2.2-slotA` — immutable; never rebased.
+- Measurement protocol is BINDING (§6): idle machine, paired sequential arms,
+  checker objectives only. Two false verdicts this session came from
+  violating it; your gate results are void if you skip it.
+
+---
 ## 1. Environment facts (verified)
 
 - Local: macOS, 8 logical / 4 performance cores; `/opt/anaconda3/bin/python`
@@ -241,8 +285,16 @@ size-limited (fine at oracle sizes); server license is full.
 | Zip builder (byte-verifies vs tag) | `scripts/build_submission_zip.sh` |
 | Leaderboard poller | `scripts/poll_leaderboard.py` |
 
-## 12. Execution reminders for GPT-5.6
+## 12. Execution reminders (for the GPT-5.6 session working this track)
 
+0. Context if you are the GPT-5.6 session: your operator's teammate ran the
+   measurements in this file on the shared repo. Your goals per your operator:
+   implement the activation rule (§0.5 A) and build scheduling/LNS
+   improvements against the frozen baseline (§0.5 B). The coordinated
+   overnight schedule and work items W1–W4 are in `TONIGHT-SUBMISSION-PLAN.md`
+   — coordinate with your operator on who owns which work item to avoid both
+   sessions editing `submission/myalgorithm.py` simultaneously; merge through
+   git, never through parallel edits of the same function.
 1. Follow `TONIGHT-SUBMISSION-PLAN.md` W1→W2→W3 (W4 only if early), gate per
    its §4, GO/NO-GO 07:45 IST. A not-green gate means SEND NOTHING — v2.2
    stands; a worse final submission is unrecoverable.
