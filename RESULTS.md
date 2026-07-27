@@ -72,3 +72,18 @@ Zip: submission/ogc2026_kestrel_v22.zip built from tag v2.2-slotA via git archiv
 sha256 d9e581d8bdee3279818f4402b8122d6858ff5444014be528a404c492d95db96a; fresh-container smoke
 on the artifact itself: loose 3,690 / congested 351,265 / tiny 3,150 — all feasible, return
 shape verified.
+
+## 2026-07-27 overnight robustness campaign — summary (as of ~08:00 IST / 11:30 KST)
+Four engines, ~2h of continuous adversarial testing against the v2.2-slotA build:
+- Fuzz lane A (macOS spawn): 330 randomized instances — ALL OK.
+- Fuzz lane B (macOS spawn): 310 randomized instances — ALL OK.
+- Fuzz lane C (ubuntu container, Linux fork, shapely 2.1.2): 330 randomized instances — ALL OK.
+- L1 soundness marathon (container, shapely 2.1.2): 130 batches × 5,000 = 650,000 adversarial
+  placement cases — 0 false-accepts throughout.
+Instance envelope covered: n ∈ [1, 700], m ∈ [1, 8], bays 12–200 wide, tiny/huge/mono-bay/
+8-bay/duplicate/congested profiles, sliver/concave/box shapes, K 1–4 (pyramid+mushroom),
+non-contiguous orientation IDs, weights incl. w1=0 / w2=10⁶-dominant / all-zero, due<release,
+zero-slack, releases up to 500, time limits 6–60 s. Zero crashes, zero infeasibles, zero
+overtime, zero hangs since the two fixes (raw-bbox containment; harness __main__ guard).
+Earlier tonight the same campaign found and fixed those two defects — the shipped Slot A
+artifact (sha256 d9e581d8…) contains both fixes.
