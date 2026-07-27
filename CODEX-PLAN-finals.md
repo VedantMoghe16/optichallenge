@@ -78,6 +78,19 @@ lifted `n>160` construct gate with a half-budget first-pass cap).
 4. Gate per §0.5 at 60 s AND 240 s. The 60 s side is the risk: a pass that
    cannot finish must not eat the budget (the half-budget cap handles this —
    verify explicitly at 30 s and 60 s on prob_38).
+5. **LIVE FINDING from the in-flight full comparison (43/60 runs,
+   experiments/results/full_compare_PARTIAL_43of60.log): the prototype
+   REGRESSES on small congested instances at 240 s (prob_21 +73%, prob_22
+   +32%, prob_23 +22%).** Root cause hypothesis (verify): for n ≤ 160 the
+   legacy exact scan already runs and works; the prototype's raster dispatch
+   *replaces* it and is strictly more conservative (6.2% over-rejection,
+   24-candidate cap, `continue` skips the scan fallback on a raster miss), so
+   quality drops where the scan was fine. FIX REQUIRED in the port: apply the
+   raster path ONLY where the alternative is rectangle packing (n > 160 or
+   scan-unaffordable), and on a raster miss FALL THROUGH to the legacy scan
+   instead of skipping the time point. The gain (prob_33/38/40, n = 250) and
+   the loss (prob_21/22/23, n ≤ 150) are cleanly separated by exactly this
+   condition.
 
 ### P1 — Solver-as-repair oracle (CP-SAT bay-window resequencing)  ⏱ 1–2 days  [highest expected gain]
 This attacks the certified scheduling gap directly. Literature anchors: Godard
