@@ -164,3 +164,40 @@ vs 5,485), so packing inefficiency explains at most ~20-30% of it within that
 relaxation and the remainder is search headroom.  Largest certified headroom:
 prob_23 1510x, prob_33 1078x, prob_39 1067x, prob_30 308x, prob_35 244x,
 prob_40 219x.  Only prob_8 is proven optimal.
+
+## F10. RETRACTED verdict + measurement protocol (a process failure, recorded)
+A 40-instance gate of the hardening changes returned "+11.57%, 17 regressions,
+0 wins, GATE FAIL". **That verdict is retracted: it was a contention artifact.**
+The sweep was launched while the raster A/B (2 processes x 4 workers) and the
+lower-bound agent's 425-515 s sweeps were still running, i.e. exactly the error
+mode F6 already documented ("all future A/Bs must run un-contended", after
+prob_25 swung 86% under 2-way load). Evidence that the verdict was wrong:
+| instance | shipped, isolated | hardened, isolated | contended gate figure |
+|---|---|---|---|
+| prob_13 | 115,643 | **113,827** | 272,725 |
+| prob_14 | 95,892 | **95,407** | 271,944 |
+and in single-process `_solve` the two builds are behaviourally IDENTICAL
+(prob_13 122,995 both, identical construct/sweep/ruin/find counters), so the
+hardening edits cannot be the cause of a portfolio-level regression of that size.
+STANDING PROTOCOL (binding for every future A/B and gate):
+1. Nothing else may run on the machine - verify with pgrep/docker ps first.
+2. Arms must be PAIRED and SEQUENTIAL: for each instance run arm A then arm B
+   back-to-back, so residual load affects both equally.
+3. A verdict from a contended run is not a verdict.
+Re-run in progress with tests harness scratchpad/bisect/paired_gate.py.
+CAVEAT: the F8 raster A/B (prob_38 -12.8%, prob_40 +13.0%) was also run 2-way
+concurrent. Within each instance both arms ran sequentially in one process, so
+the pairing is sound, but those two numbers must be reconfirmed un-contended
+before the raster decoder is promoted; prob_40's regression in particular may be
+partly artifact.
+
+## Verified hardening items (synthetic instances, all checker-feasible)
+| audit item | before | after |
+|---|---|---|
+| processing_time = 0 | EXIT before ENTRY -> missing EXIT | feasible (dwell = max(1, P)) |
+| degenerate collinear layers | run aborted ("degenerate block geometry") | feasible (raw-bbox proxy orientation) |
+| timelimit = 0.05 s | 0.33 s (6.6x over) | 0.05 s |
+| 20000 x 5000 bay | OOM/timeout risk | feasible, 29.2 s of 30 s |
+| env-var activation of experimental paths | os.environ read at import | plain module constants (LAYER_TRUE/XBAY = False) |
+Item 6 (n=160/161 and max_release 60/61 threshold-cliff measurement) not done -
+carried forward.
