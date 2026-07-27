@@ -1,0 +1,51 @@
+
+##### PHASE 60: 40 instances @ 60s
+
+prob_1   kestrel=         1,499 (Z1=     0)  raster=         1,499 (Z1=     0)    +0.00%  feas=True/True
+prob_2   kestrel=         3,690 (Z1=     0)  raster=         5,030 (Z1=     0)   +36.31%  feas=True/True
+prob_3   kestrel=        56,890 (Z1=     0)  raster=        65,610 (Z1=     0)   +15.33%  feas=True/True
+prob_4   kestrel=        16,916 (Z1=     0)  raster=        34,346 (Z1=     0)  +103.04%  feas=True/True
+prob_5   kestrel=        61,275 (Z1=     0)  raster=        75,997 (Z1=     0)   +24.03%  feas=True/True
+prob_6   kestrel=        81,366 (Z1=     0)  raster=        93,425 (Z1=     0)   +14.82%  feas=True/True
+prob_7   kestrel=        63,018 (Z1=     0)  raster=        77,619 (Z1=     0)   +23.17%  feas=True/True
+prob_8   kestrel=        11,252 (Z1=     0)  raster=        11,252 (Z1=     0)    +0.00%  feas=True/True
+prob_9   kestrel=        50,885 (Z1=     0)  raster=        88,500 (Z1=     0)   +73.92%  feas=True/True
+prob_10  kestrel=        73,661 (Z1=     0)  raster=       106,778 (Z1=     0)   +44.96%  feas=True/True
+prob_11  kestrel=        56,252 (Z1=     0)  raster=        56,098 (Z1=     0)    -0.27%  feas=True/True
+prob_12  kestrel=        95,340 (Z1=     0)  raster=       123,501 (Z1=     0)   +29.54%  feas=True/True
+prob_13  kestrel=       113,827 (Z1=     0)  raster=       149,960 (Z1=     0)   +31.74%  feas=True/True
+prob_14  kestrel=        96,025 (Z1=     0)  raster=       197,430 (Z1=     4)  +105.60%  feas=True/True
+prob_15  kestrel=        43,165 (Z1=     0)  raster=        64,840 (Z1=     0)   +50.21%  feas=True/True
+prob_16  kestrel=        48,048 (Z1=     0)  raster=        72,593 (Z1=     0)   +51.08%  feas=True/True
+prob_17  kestrel=        57,857 (Z1=     0)  raster=        97,627 (Z1=     0)   +68.74%  feas=True/True
+prob_18  kestrel=        69,019 (Z1=     0)  raster=        82,646 (Z1=     0)   +19.74%  feas=True/True
+prob_19  kestrel=        61,975 (Z1=     0)  raster=        91,739 (Z1=     0)   +48.03%  feas=True/True
+prob_20  kestrel=       305,288 (Z1=     5)  raster=       148,314 (Z1=     0)   -51.42%  feas=True/True
+prob_21  kestrel=     1,196,330 (Z1=    60)  raster=     2,074,252 (Z1=   124)   +73.38%  feas=True/True
+prob_22  kestrel=       918,140 (Z1=     7)  raster=     1,192,094 (Z1=    20)   +29.84%  feas=True/True
+prob_23  kestrel=     3,814,626 (Z1=   261)  raster=     4,650,330 (Z1=   317)   +21.91%  feas=True/True
+prob_24  kestrel=       522,640 (Z1=    20)  raster=       849,539 (Z1=    38)   +62.55%  feas=True/True
+prob_25  kestrel=       351,265 (Z1=   472)  raster=       500,722 (Z1=   704)   +42.55%  feas=True/True
+prob_26  kestrel=    14,801,247 (Z1=  1054)  raster=    17,050,975 (Z1=  1220)   +15.20%  feas=True/True
+prob_27  kestrel=    35,113,516 (Z1=  2510)  raster=    42,638,290 (Z1=  3078)   +21.43%  feas=True/True
+prob_28  kestrel=     2,614,435 (Z1=   145)  raster=     5,320,429 (Z1=   346)  +103.50%  feas=True/True
+prob_29  kestrel=       604,238 (Z1=     5)  raster=       767,118 (Z1=    18)   +26.96%  feas=True/True
+prob_30  kestrel=     4,994,360 (Z1=   352)  raster=     7,395,431 (Z1=   523)   +48.08%  feas=True/True
+prob_31  kestrel=    17,038,530 (Z1=  1089)  raster=    13,169,640 (Z1=   798)   -22.71%  feas=True/True
+prob_32  kestrel=     6,122,146 (Z1=  1557)  raster=     4,994,088 (Z1=  1261)   -18.43%  feas=True/True
+prob_33  kestrel=    17,439,700 (Z1=  2510)  raster=    19,942,189 (Z1=  2907)   +14.35%  feas=True/True
+prob_34  kestrel=     2,573,719 (Z1=   651)  raster=     2,812,190 (Z1=   724)    +9.27%  feas=True/True
+prob_35  kestrel=     5,688,536 (Z1=   397)  raster=     6,236,353 (Z1=   431)    +9.63%  feas=True/True
+prob_36  kestrel=       408,586 (Z1=   437)  raster=       397,348 (Z1=   406)    -2.75%  feas=True/True
+prob_37  kestrel=     7,101,223 (Z1=  1875)  raster=     7,753,500 (Z1=  2056)    +9.19%  feas=True/True
+prob_38  kestrel=    74,206,489 (Z1=  5461)  raster=    78,249,764 (Z1=  5738)    +5.45%  feas=True/True
+prob_39  kestrel=    26,247,309 (Z1=  1901)  raster=    30,515,437 (Z1=  2227)   +16.26%  feas=True/True
+prob_40  kestrel=     4,333,746 (Z1=  6324)  raster=     4,707,071 (Z1=  6854)    +8.61%  feas=True/True
+
+PHASE 60 TOTAL kestrel=227,458,029 raster=252,861,564 (+11.17%)
+
+##### PHASE 240: 20 instances @ 240s
+
+prob_21  kestrel=     1,196,330 (Z1=    60)  raster=     2,074,252 (Z1=   124)   +73.38%  feas=True/True
+prob_22  kestrel=       859,937 (Z1=     7)  raster=     1,134,136 (Z1=    14)   +31.89%  feas=True/True
+prob_23  kestrel=     3,814,626 (Z1=   261)  raster=     4,648,641 (Z1=   317)   +21.86%  feas=True/True

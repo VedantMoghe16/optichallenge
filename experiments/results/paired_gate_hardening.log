@@ -1,0 +1,44 @@
+prob_1   shipped=        1,499 hardened=        1,499   +0.00%  feas=True/True
+prob_2   shipped=        3,690 hardened=        3,690   +0.00%  feas=True/True
+prob_3   shipped=       56,890 hardened=       56,890   +0.00%  feas=True/True
+prob_4   shipped=       16,916 hardened=       16,916   +0.00%  feas=True/True
+prob_5   shipped=       61,275 hardened=       61,275   +0.00%  feas=True/True
+prob_6   shipped=       73,824 hardened=       73,824   +0.00%  feas=True/True
+prob_7   shipped=       63,018 hardened=       63,018   +0.00%  feas=True/True
+prob_8   shipped=       11,252 hardened=       11,252   +0.00%  feas=True/True
+prob_9   shipped=       50,885 hardened=       50,885   +0.00%  feas=True/True
+prob_10  shipped=       74,123 hardened=       73,661   -0.62%  feas=True/True
+prob_11  shipped=       56,154 hardened=       52,955   -5.70%  feas=True/True
+prob_12  shipped=       96,677 hardened=       95,340   -1.38%  feas=True/True
+prob_13  shipped=      119,955 hardened=      115,200   -3.96%  feas=True/True
+prob_14  shipped=       95,407 hardened=       95,407   +0.00%  feas=True/True
+prob_15  shipped=       43,165 hardened=       43,165   +0.00%  feas=True/True
+prob_16  shipped=       48,048 hardened=       48,048   +0.00%  feas=True/True
+prob_17  shipped=       57,857 hardened=       57,857   +0.00%  feas=True/True
+prob_18  shipped=       69,019 hardened=       69,152   +0.19%  feas=True/True
+prob_19  shipped=       61,975 hardened=       61,975   +0.00%  feas=True/True
+prob_20  shipped=      305,288 hardened=      305,288   +0.00%  feas=True/True
+prob_21  shipped=    1,196,330 hardened=    1,196,330   +0.00%  feas=True/True
+prob_22  shipped=      918,140 hardened=      918,140   +0.00%  feas=True/True
+prob_23  shipped=    3,814,626 hardened=    3,814,626   +0.00%  feas=True/True
+prob_24  shipped=      522,640 hardened=      522,640   +0.00%  feas=True/True
+prob_25  shipped=      351,265 hardened=      351,265   +0.00%  feas=True/True
+prob_26  shipped=   13,937,342 hardened=   13,937,342   +0.00%  feas=True/True
+prob_27  shipped=   35,113,516 hardened=   35,113,516   +0.00%  feas=True/True
+prob_28  shipped=    2,614,435 hardened=    2,614,435   +0.00%  feas=True/True
+prob_29  shipped=      604,238 hardened=      604,238   +0.00%  feas=True/True
+prob_30  shipped=    4,994,360 hardened=    4,994,360   +0.00%  feas=True/True
+prob_31  shipped=   16,694,333 hardened=   16,624,950   -0.42%  feas=True/True
+prob_32  shipped=    6,134,259 hardened=    6,181,992   +0.78%  feas=True/True
+prob_33  shipped=   17,355,699 hardened=   17,528,781   +1.00%  feas=True/True
+prob_34  shipped=    2,451,888 hardened=    2,455,221   +0.14%  feas=True/True
+prob_35  shipped=    5,586,483 hardened=    5,586,483   +0.00%  feas=True/True
+prob_36  shipped=      400,263 hardened=      414,381   +3.53%  feas=True/True
+prob_37  shipped=    7,096,911 hardened=    7,116,909   +0.28%  feas=True/True
+prob_38  shipped=   74,434,006 hardened=   74,434,006   +0.00%  feas=True/True
+prob_39  shipped=   26,446,574 hardened=   26,440,487   -0.02%  feas=True/True
+prob_40  shipped=    4,386,611 hardened=    4,413,863   +0.62%  feas=True/True
+
+TOTAL shipped=226,420,836 hardened=226,621,262 (+0.09%)
+wins=4 ties=32 regressions=4 infeasible=NONE
+GATE: PASS

@@ -1,0 +1,6 @@
+prob_38   base=    72,945,723 (Z1=  5359)  raster=    64,010,483 (Z1=  4675)   -12.25%  feas=True/True
+prob_40   base=     4,085,430 (Z1=  5943)  raster=     3,279,817 (Z1=  4721)   -19.72%  feas=True/True
+prob_27   base=    35,072,828 (Z1=  2504)  raster=    41,944,800 (Z1=  3018)   +19.59%  feas=True/True
+prob_33   base=    16,420,913 (Z1=  2359)  raster=    14,146,686 (Z1=  2048)   -13.85%  feas=True/True
+
+TOTAL base=128,524,894 raster=123,381,786 (-4.00%)
