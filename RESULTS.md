@@ -63,3 +63,12 @@ Found + fixed: (1) containment bbox from repaired-union bounds ≠ checker raw-v
 driver __main__ guard (macOS spawn process bomb — server fork immune; live-validated the
 worker-crash fall-through: 4 dead workers → feasible single-process finish). Post-fix
 smoke: 9/9 OK.
+
+## 2026-07-27 ~10:45 KST — SLOT A ARTIFACT SHIPPED-READY
+Parity battery (ubuntu 24.04 container, fork, shapely 2.1.2): 14/14 PASS after correcting the
+battery's kill-test process targeting (it had killed the driver; proper grandchild-worker
+SIGKILL → feasible, rc=0, 4 fork workers confirmed). Soak peak RSS 1,402 MB (fork, 4 workers).
+Zip: submission/ogc2026_kestrel_v22.zip built from tag v2.2-slotA via git archive;
+sha256 d9e581d8bdee3279818f4402b8122d6858ff5444014be528a404c492d95db96a; fresh-container smoke
+on the artifact itself: loose 3,690 / congested 351,265 / tiny 3,150 — all feasible, return
+shape verified.

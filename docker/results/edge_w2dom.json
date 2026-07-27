@@ -1,0 +1,13 @@
+{
+ "prob": "/tmp/bench/edges/edge_w2dom.json",
+ "name": "edge_w2dom",
+ "timelimit": 30.0,
+ "elapsed": 28.24,
+ "feasible": true,
+ "stage": 5,
+ "objective": 8004835.0,
+ "obj1": 42.0,
+ "obj2": 8,
+ "obj3": 4793.0,
+ "violations": []
+}

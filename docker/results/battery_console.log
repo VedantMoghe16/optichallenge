@@ -1,0 +1,63 @@
+== environment
+python 3.12.3 | shapely 2.1.2
+cores: 8
+== case solo_prob35  (/repo/train/prob_35.json @ 60s)
+{"prob": "/repo/train/prob_35.json", "name": "prob_35", "timelimit": 60.0, "elapsed": 56.57, "feasible": true, "stage": 5, "objective": 5413325.0, "obj1": 375.0, "obj2": 820, "obj3": 2729.0, "violations": []}
+== case solo_prob36  (/repo/train/prob_36.json @ 60s)
+{"prob": "/repo/train/prob_36.json", "name": "prob_36", "timelimit": 60.0, "elapsed": 56.63, "feasible": true, "stage": 5, "objective": 396042.0, "obj1": 419.0, "obj2": 2533, "obj3": 8772.0, "violations": []}
+== generating edge cases
+wrote edge_n600  (n=600, m=4, w={'w1': 9697, 'w2': 4, 'w3': 133})
+wrote edge_m1  (n=100, m=1, w={'w1': 29091, 'w2': 7, 'w3': 200})
+wrote edge_orient  (n=100, m=3, w={'w1': 29091, 'w2': 10, 'w3': 150})
+wrote edge_w1zero  (n=150, m=3, w={'w1': 0, 'w2': 7, 'w3': 150})
+wrote edge_w2dom  (n=150, m=3, w={'w1': 1, 'w2': 1000000, 'w3': 1})
+wrote edge_n5  (n=5, m=2, w={'w1': 29091, 'w2': 7, 'w3': 200})
+wrote edge_zeroslack  (n=100, m=3, w={'w1': 29091, 'w2': 10, 'w3': 150})
+== case edge_n600  (/tmp/bench/edges/edge_n600.json @ 60s)
+{"prob": "/tmp/bench/edges/edge_n600.json", "name": "edge_n600", "timelimit": 60.0, "elapsed": 56.75, "feasible": true, "stage": 5, "objective": 972088.0, "obj1": 34.0, "obj2": 7847, "obj3": 4594.0, "violations": []}
+== case edge_m1  (/tmp/bench/edges/edge_m1.json @ 30s)
+{"prob": "/tmp/bench/edges/edge_m1.json", "name": "edge_m1", "timelimit": 30.0, "elapsed": 28.28, "feasible": true, "stage": 5, "objective": 9309120.0, "obj1": 320.0, "obj2": 0.0, "obj3": 0.0, "violations": []}
+== case edge_orient  (/tmp/bench/edges/edge_orient.json @ 30s)
+{"prob": "/tmp/bench/edges/edge_orient.json", "name": "edge_orient", "timelimit": 30.0, "elapsed": 28.25, "feasible": true, "stage": 5, "objective": 5030.0, "obj1": 0.0, "obj2": 68, "obj3": 29.0, "violations": []}
+== case edge_w1zero  (/tmp/bench/edges/edge_w1zero.json @ 30s)
+{"prob": "/tmp/bench/edges/edge_w1zero.json", "name": "edge_w1zero", "timelimit": 30.0, "elapsed": 28.24, "feasible": true, "stage": 5, "objective": 36788.0, "obj1": 99.0, "obj2": 2534, "obj3": 127.0, "violations": []}
+== case edge_w2dom  (/tmp/bench/edges/edge_w2dom.json @ 30s)
+{"prob": "/tmp/bench/edges/edge_w2dom.json", "name": "edge_w2dom", "timelimit": 30.0, "elapsed": 28.24, "feasible": true, "stage": 5, "objective": 8004835.0, "obj1": 42.0, "obj2": 8, "obj3": 4793.0, "violations": []}
+== case edge_n5  (/tmp/bench/edges/edge_n5.json @ 30s)
+{"prob": "/tmp/bench/edges/edge_n5.json", "name": "edge_n5", "timelimit": 30.0, "elapsed": 28.8, "feasible": true, "stage": 5, "objective": 3150.0, "obj1": 0.0, "obj2": 450, "obj3": 0.0, "violations": []}
+== case edge_zeroslack  (/tmp/bench/edges/edge_zeroslack.json @ 30s)
+{"prob": "/tmp/bench/edges/edge_zeroslack.json", "name": "edge_zeroslack", "timelimit": 30.0, "elapsed": 28.24, "feasible": true, "stage": 5, "objective": 5430.0, "obj1": 0.0, "obj2": 123, "obj3": 28.0, "violations": []}
+== case tl10  (/repo/train 2/prob_20.json @ 10s)
+{"prob": "/repo/train 2/prob_20.json", "name": "prob_20", "timelimit": 10.0, "elapsed": 9.64, "feasible": true, "stage": 5, "objective": 305288.0, "obj1": 5.0, "obj2": 1263, "obj3": 1315.0, "violations": []}
+== case tl21  (/repo/train 2/prob_20.json @ 21s)
+{"prob": "/repo/train 2/prob_20.json", "name": "prob_20", "timelimit": 21.0, "elapsed": 19.73, "feasible": true, "stage": 5, "objective": 305288.0, "obj1": 5.0, "obj2": 1263, "obj3": 1315.0, "violations": []}
+== case tl30  (/repo/train 2/prob_20.json @ 30s)
+{"prob": "/repo/train 2/prob_20.json", "name": "prob_20", "timelimit": 30.0, "elapsed": 28.34, "feasible": true, "stage": 5, "objective": 305288.0, "obj1": 5.0, "obj2": 1263, "obj3": 1315.0, "violations": []}
+== case killtest  (prob_20 @ 60s, kill -9 one worker at t=15s)
+   killing child pid 214 of driver 213 (children: 214 )
+/repo/docker/parity_battery.sh: line 98:   213 Killed                  ( cd "$BENCH" && timeout -k 10 150 python3 driver.py "$LOOSE/prob_20.json" 60 "$RESULTS/killtest.json" )
+== case soak_prob38  (300s, RSS sampled every 2s)
+{"prob": "/repo/train/prob_38.json", "name": "prob_38", "timelimit": 300.0, "elapsed": 287.78, "feasible": true, "stage": 5, "objective": 71923453.0, "obj1": 5271.0, "obj2": 1655, "obj3": 5473.0, "violations": []}
+   peak tree RSS: 1402 MB
+
+===================================================================================================================================
+PARITY BATTERY SUMMARY  (/results)
+===================================================================================================================================
+case            feas  objective  t/limit      verdict  notes                                                                       
+-----------------------------------------------------------------------------------------------------------------------------------
+edge_m1         yes   9309120    28.3/30.0    PASS                                                                                 
+edge_n5         yes   3150       28.8/30.0    PASS                                                                                 
+edge_n600       yes   972088     56.8/60.0    PASS                                                                                 
+edge_orient     yes   5030       28.2/30.0    PASS                                                                                 
+edge_w1zero     yes   36788      28.2/30.0    PASS                                                                                 
+edge_w2dom      yes   8004835    28.2/30.0    PASS                                                                                 
+edge_zeroslack  yes   5430       28.2/30.0    PASS                                                                                 
+killtest        NO    -          -            FAIL     driver died (rc=137) after worker SIGKILL; SIGKILLed worker pid 214 at t=15s
+soak_prob38     yes   71923453   287.8/300.0  PASS     peak RSS 1402 MB                                                            
+solo_prob35     yes   5413325    56.6/60.0    PASS                                                                                 
+solo_prob36     yes   396042     56.6/60.0    PASS                                                                                 
+tl10            yes   305288     9.6/10.0     PASS                                                                                 
+tl21            yes   305288     19.7/21.0    PASS                                                                                 
+tl30            yes   305288     28.3/30.0    PASS                                                                                 
+-----------------------------------------------------------------------------------------------------------------------------------
+total: 14 cases, 1 FAIL, 0 WARN
