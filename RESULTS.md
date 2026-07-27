@@ -119,3 +119,84 @@ tardiness on 19 instances is therefore attributable to packing efficiency, not p
 impossibility — which independently validates the layer-true/overhang programme (the
 union-footprint invariant is the measured ceiling) as the top finals lever, and means an
 area-based LB cannot certify optimality on the congested set (a geometric LB is finals work).
+
+## 2026-07-27 ~17:30 KST — GEOMETRIC/ENERGETIC LOWER BOUND ON Z1 (tests/geometric_lb.py)
+Follow-up to the 13:45 audit, which found the area-energetic Z1 bound of tests/lower_bounds.py
+to be 0.0 on all 40 instances. New module `tests/geometric_lb.py` (7 min for all 40, self-test
+included) derives five provably valid relaxations and reports the max; every proof is in the
+module docstring with the exact utils.py line references it relies on.
+
+RESOURCES (what is provably scarce)
+* P1 layer-0 area, capacity Σ_j W_j·H_j — layer 0 is shared by every pair, so utils L521
+  applies unconditionally; containment via the ALL-layer bbox (utils L252-266).
+* P2 **slab / strip relaxation** (generalises the "tall blocks cannot stack" idea). The naive
+  form — two blocks with bbox height > H/2 must have Σ bbox widths ≤ W — is **FALSE** here:
+  interlocking concave layers can overlap in x while staying interior-disjoint. The valid
+  repair is the guaranteed slab occupancy g_i(j,σ) = min over admissible orientations and over
+  all admissible INTEGER y-offsets (positions are integers, utils L1154) of the layer-0 area
+  inside a horizontal slab σ ⊂ [0,H_j]; then Σ_present g_i ≤ W_j·(β−α). It contains the strip
+  bound exactly (rectangle w×h, h>H/2, slab (H−h,h) ⇒ d/cap = w/W) and degrades instead of
+  breaking on concave shapes. Slab thickness optimised per bay (matched-ρ grid + exhaustive
+  coordinate ascent). MEASURED GAIN: +29% on prob_27 (t=(18,14) vs the full (20,16)), 0
+  elsewhere — because all 8 orientations include 90° rotations, so min_o(bbox height) is small
+  and nothing is forced to be tall. Kept (provable, instance-independent).
+* P3 bay-subset restriction B_i. Nearly vacuous on this set: ≥97% of blocks fit every bay.
+
+ENGINES (how scarcity is converted into forced tardiness)
+* W energetic-window cover: compulsory part [D_i+x_i−P_i, R_i+P_i) shrinks 1 day per unit of
+  tardiness ⇒ fractional knapsack cover of the window excess. Subsumes the single-instant
+  mandatory-presence test of the 13:45 audit.
+* F **deadline-window cover** — the strongest engine: the whole P_i must fit inside
+  [R_i, D_i+x_i), giving forced overlap ≥ F_i − (x_i − (b−D_i)^+)^+ with
+  F_i = (P_i − (a−R_i)^+ − (D_i−b)^+)^+. Tardiness-cost analogue of the Gale–Hoffman condition
+  for the preemptive transportation relaxation. 2.3× engine W on prob_38, 1.2× on prob_27.
+* L preemptive whole-horizon LP (30-110k cols) with mandatory-presence and window cuts; wins
+  only on prob_27 (+5%).  R prefix/rearrangement energetic bound (strengthens the old max-form
+  to a sum-form): 0 on all 40.
+* Free strengthening: exit times are integers (utils L1047) ⇒ Z1 ∈ ℤ≥0 ⇒ ceil() the bound.
+
+RESULTS (vs shipped gateB/v21 = v2.2-slotA objectives)
+* PROVEN NON-ZERO Z1 on 2/40: prob_27 LB_Z1 = 71 (ours 3,744), prob_38 LB_Z1 = 115 (ours 5,485).
+  Objective LB: prob_27 31,156 → 977,799 (**31.4×**), prob_38 17,678 → 1,550,973 (**87.7×**).
+* Congested group prob_21-40: old_LB 738,179 → new_LB 3,218,117 (4.36×); ours/LB 114.5 → 76.1.
+  Loose group prob_1-20: unchanged at 502,748 (ours/LB 2.81) — Z1 = 0 is proven optimal on
+  19/20; prob_20 (Z1 = 5) is NOT certified.
+* SANITY (required): LB > ours on **0/40**, LB_Z1 > ours_Z1 on **0/40**. Self-test
+  (`python tests/geometric_lb.py selftest`): five 5×5 squares in one 10×10 bay, R=0, D=P=2 —
+  four tile the bay, the fifth cannot be co-present, optimum Z1 = 2; the bound returns
+  **exactly 2.0**, and 0.0 for the 4-square variant. So the machinery is tight where the
+  binding constraint really is area, and the weakness below is a property of the instances.
+* Peak *forced* layer-0 density (mandatory presence / bay area): 0.22-0.36 on prob_1-20,
+  0.41-1.21 on prob_21-40; horizon utilisation Σa_i·P_i/(C·span) = 0.13-0.27 vs 0.25-0.72.
+
+REJECTED WITH PROOF + MEASUREMENT (documented in the docstring, not shipped)
+* Dual feasible functions (Fekete–Schepers 2001; Carlier–Clautiaux–Moukrim 2007) applied to
+  unit-cell coverage — valid because positions and bay dimensions are integral, so each cell
+  obeys Σ_i c_i(cell) ≤ 1. Measured with f_{0,ε}: d^u/area = 0.974-1.000 for ε ∈ [0,0.5] on
+  prob_21/27/38, i.e. **every non-trivial DFF is dominated by plain area** (boundary-cell
+  coverages are spread over (0,1), not concentrated near 1).
+* Crane rule (utils Stages 2/3/5). It does add area: the last-exiting block's whole footprint
+  is disjoint from every other layer-0, giving Σ area(L0_i) + max_i(area(∪layers_i) −
+  area(L0_i)) ≤ W_j·H_j — one block's upper-layer surplus, <1% of capacity.
+* Layer index k>0 in the disjointness constraint: valid on {i : K_i > k} but always dominated.
+
+CONCLUSION / WHERE THE FINALS EFFORT SHOULD GO
+1. No congested instance is certified near-optimal. Certified headroom is largest on
+   prob_23 (1510×), prob_33 (1078×), prob_39 (1067×), prob_30 (308×), prob_35 (244×),
+   prob_40 (219×). Proven optimal: prob_8 (1.00×). Tight-ish: prob_10 1.32×, prob_3 1.46×,
+   prob_17 1.48×, prob_1 1.52×.
+2. Z1-ELIMINATION UPSIDE — w1·(ours_Z1 − LB_Z1) as a share of our objective, which is the
+   *maximum* the tardiness term could still yield: prob_40 97.3%, prob_39 96.6%, prob_33 96.1%,
+   prob_35 93.0%, prob_23 92.8%, prob_25 89.6%, prob_37 88.3%, prob_32 88.3%, prob_34 86.1%,
+   prob_31 84.9%. On all of these the forced density peaks at 0.54-0.84 — i.e. the physics
+   does not require the tardiness we are paying for. Tardiness reduction, not Z2/Z3 polish, is
+   the dominant finals lever on prob_21-40.
+3. Density-sensitivity DIAGNOSTIC (NOT a bound; assumes an unproven max packing density δ):
+   even at δ = 0.5, forced tardiness stays far below ours — prob_40 1,168 vs 6,554,
+   prob_39 396 vs 1,978, prob_33 687 vs 2,560, prob_38 1,644 vs 5,485. So packing
+   inefficiency alone (down to 50% fill) explains at most ~20-30% of our tardiness under this
+   relaxation; the remainder is search/sequencing headroom, or slack in the relaxation itself.
+   Honest limit of the audit: area-type relaxations cannot certify more, because any additive
+   functional valid under interior-disjointness alone is dominated by area (the DFF result
+   above is the concrete evidence). Certifying the congested set would require exact
+   irregular-packing feasibility reasoning, which is out of scope for the finals window.
