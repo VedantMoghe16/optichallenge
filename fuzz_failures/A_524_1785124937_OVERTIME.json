@@ -1,0 +1,2630 @@
+{
+ "instance": {
+  "name": "fuzz_A524",
+  "bays": [
+   {
+    "width": 35,
+    "height": 16
+   },
+   {
+    "width": 57,
+    "height": 21
+   },
+   {
+    "width": 44,
+    "height": 26
+   }
+  ],
+  "blocks": [
+   {
+    "release_time": 30,
+    "due_date": 79,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 27,
+    "due_date": 75,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 27,
+    "due_date": 70,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 22,
+    "due_date": 64,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 6,
+    "due_date": 51,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 27,
+    "due_date": 69,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 12,
+    "due_date": 52,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 12,
+    "due_date": 60,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 11,
+    "due_date": 52,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 15,
+    "due_date": 60,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 4,
+    "due_date": 44,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 1,
+    "due_date": 41,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 28,
+    "due_date": 74,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 0,
+    "due_date": 44,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 9,
+    "due_date": 56,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 15,
+    "due_date": 65,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 8,
+    "due_date": 54,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 26,
+    "due_date": 67,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 24,
+    "due_date": 72,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 26,
+    "due_date": 67,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 1,
+    "due_date": 41,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 22,
+    "due_date": 72,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 0,
+    "due_date": 43,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 20,
+    "due_date": 67,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 13,
+    "due_date": 54,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 24,
+    "due_date": 67,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 21,
+    "due_date": 71,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 29,
+    "due_date": 70,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 4,
+    "due_date": 45,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 14,
+    "due_date": 54,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 13,
+    "due_date": 62,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 11,
+    "due_date": 55,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 27,
+    "due_date": 76,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 18,
+    "due_date": 67,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 20,
+    "due_date": 67,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 29,
+    "due_date": 71,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 25,
+    "due_date": 69,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 10,
+    "due_date": 52,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 9,
+    "due_date": 53,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 26,
+    "due_date": 69,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 4,
+    "due_date": 54,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 18,
+    "due_date": 64,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 28,
+    "due_date": 71,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 28,
+    "due_date": 70,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 26,
+    "due_date": 72,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 10,
+    "due_date": 57,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 25,
+    "due_date": 68,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 2,
+    "due_date": 46,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 26,
+    "due_date": 68,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 18,
+    "due_date": 66,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 12,
+    "due_date": 59,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 30,
+    "due_date": 79,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 7,
+    "due_date": 54,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 28,
+    "due_date": 70,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 29,
+    "due_date": 78,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 7,
+    "due_date": 50,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 21,
+    "due_date": 68,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 15,
+    "due_date": 62,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 11,
+    "due_date": 51,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 10,
+    "due_date": 59,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 0,
+    "due_date": 45,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 21,
+    "due_date": 70,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 30,
+    "due_date": 79,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 27,
+    "due_date": 70,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 27,
+    "due_date": 75,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 13,
+    "due_date": 57,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 26,
+    "due_date": 71,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 6,
+    "due_date": 51,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 21,
+    "due_date": 69,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 13,
+    "due_date": 55,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 1,
+    "due_date": 42,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 19,
+    "due_date": 60,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 22,
+    "due_date": 70,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 13,
+    "due_date": 62,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 30,
+    "due_date": 71,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 24,
+    "due_date": 66,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 4,
+    "due_date": 44,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 8,
+    "due_date": 54,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 23,
+    "due_date": 65,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 18,
+    "due_date": 63,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "release_time": 14,
+    "due_date": 61,
+    "processing_time": 40,
+    "workload": 1,
+    "bay_preferences": [
+     49,
+     25,
+     26
+    ],
+    "shape": [
+     {
+      "orientation": 0,
+      "layers": [
+       [
+        [
+         0.0,
+         0.0
+        ],
+        [
+         2.8,
+         0.02
+        ],
+        [
+         1.4,
+         0.35
+        ]
+       ]
+      ]
+     }
+    ]
+   }
+  ],
+  "weights": {
+   "w1": 0,
+   "w2": 0,
+   "w3": 0
+  }
+ },
+ "timelimit": 20.5,
+ "result": {
+  "verdict": "OVERTIME",
+  "elapsed": 77.89952778816223,
+  "feasible": true,
+  "objective": 0.0,
+  "stage": 5,
+  "violations": []
+ },
+ "profile": "dup",
+ "lane": "A",
+ "seed": 11
+}

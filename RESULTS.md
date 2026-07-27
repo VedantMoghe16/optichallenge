@@ -96,3 +96,26 @@ adversarial instances, ZERO failures of any class. L1 marathon: 188 clean batche
 Campaign totals incl. the discovery phase: 2 solver defects found+fixed (raw-bbox
 containment; mp drain-hang), 1 harness defect fixed, both fixes shipped in v2.2-slotA
 (sha256 d9e581d8bdee3279818f4402b8122d6858ff5444014be528a404c492d95db96a).
+
+## 2026-07-27 ~13:45 KST — Rigorous lower-bound audit (tests/lower_bounds.py)
+Two provable relaxations of the published objective (statement §1.7, code utils L1397-1430):
+(a) energetic area-capacity tardiness bound — layer-0 same-layer disjointness (utils L521)
+    implies capacity C = Σ_j W_j·H_j for the resource "layer-0 area"; for any (r,d),
+    Z1 ≥ [Σ_{i: R_i≥r, D_i≤d} a_i·P_i − C(d−r)]/C with a_i = min_o area(layer0);
+(b) LP relaxation of the assignment problem for w2·Z2 + w3·Z3 (exact for the LP, valid LB
+    for the integer problem; floor() monotone).
+RESULTS: (a) evaluates to **0.0 on all 40 instances** — the area relaxation is VACUOUS.
+Mandatory-presence test (block must occupy its bay at t iff D_i−P_i ≤ t < R_i+P_i):
+peak/bayArea > 1 on only **2/40** (prob_27 1.21, prob_38 1.15) → tardiness provably forced
+on 2 instances only, while our build incurs Z1 > 0 on 21.
+PROVEN OPTIMAL: prob_8 (LB 11,252 = ours 11,252, ratio 1.00).
+PROVEN TARDINESS-OPTIMAL: 19/20 loose instances (Z1 = 0 = min).
+RETRACTION: the earlier note that prob_1's 1,499 equals "the assignment-only floor" came from
+a heuristic multi-start estimate, not a proof; the LP relaxation gives 988, so 1,499 is NOT
+proven optimal. Corrected here for report integrity.
+SCIENTIFIC CONCLUSION: raw area is never the binding resource; the binding resource is
+*packing-feasible* area (median bbox fill 0.67, irregular layers, crane precedence). Our
+tardiness on 19 instances is therefore attributable to packing efficiency, not physical
+impossibility — which independently validates the layer-true/overhang programme (the
+union-footprint invariant is the measured ceiling) as the top finals lever, and means an
+area-based LB cannot certify optimality on the congested set (a geometric LB is finals work).

@@ -55,3 +55,13 @@ v2.1 search behavior + drain-hang fix + raw-bbox containment fix + dormant flags
 (KESTREL_LAYER_TRUE, KESTREL_XBAY) — strictly safer than v2.1-frozen, search-identical.
 prob_11 residual deltas shown to be ±12% same-build portfolio timing variance.
 XBAY and layer-true carry to finals as gated experiments.
+
+## 2026-07-27 ~13:45 KST — LB audit does NOT change the submission
+Lower-bound study (RESULTS.md) found no defect and no shippable improvement: it identifies a
+research direction (geometric packing efficiency), not a code fix. With <20 min to the 14:00 KST
+close, any code change would be ungated — forbidden by the operating rules (§3.7, gate decides
+what may ship). v22 (sha256 d9e581d8…) remains the submission. Finals backlog gains: (1) a
+geometric lower bound (LP/energetic over packing-feasible area or a per-bay 2D-knapsack
+relaxation) to replace the vacuous area bound; (2) layer-true value integration, now with
+quantified justification; (3) the 7 Codex audit hardening items (reentrancy, P=0, degenerate
+polygons, bay-dimension guard, flag removal, exact-key caches, threshold cliffs).
