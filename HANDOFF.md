@@ -1,132 +1,175 @@
-# HANDOFF — OGC 2026 "Kestrel" solver: complete state of work
-*(Self-contained brief for pasting into another AI session. Written 2026-07-27, ~07:30 KST.)*
+# TEAM HANDOFF — OGC 2026 "Kestrel" (updated 2026-07-27 22:15 KST)
 
-## 1. The competition (facts, all verified)
+*This replaces the pre-submission handoff (see git history for the old one).
+Everything below is either measured in this repo or cited; the evidence ledgers
+are `RESULTS.md`, `DECISIONS.md`, `FINDINGS-finals.md`.*
 
-- **OGC 2026** (optichallenge.com, LG CNS + Seoul National University): "The Grand Shipyard Puzzle."
-  400 teams. **Preliminary closes 2026-07-28 14:00 KST (tomorrow). Final round Aug 3–14. Top 30–40 advance.**
-- Submission: email ONE zip (myalgorithm.py at root, ≤15 MB, never include utils.py) to
-  submission@optichallenge.com from the registered team email. **12-hour cooldown; the latest accepted
-  submission always replaces the previous one — even if it's worse.** We treat remaining slots as 2:
-  Slot A today, Slot B tomorrow morning (email by ~12:00 KST for buffer), Slot B only if strictly better.
-- Scoring: per hidden instance, rank-based; infeasible/crash/timeout = −1 (catastrophic). Currently 6
-  hidden instances P1–P6 (may be augmented). Dashboard shows P3 is hardest (15 teams infeasible, 5 crash)
-  and P6 crash-prone (11 crashes). Time limits "tens of seconds to tens of minutes" (2025 finals precedent:
-  14 instances, 30–600 s).
-- Server: Ubuntu 24.04, 4 CPU cores (firejail/cpulimit throttling, not kill), 16 GB, Python 3.12 conda,
-  shapely 2.1.2, gurobipy 13 licensed, no internet. Entry point `algorithm(prob_info, timelimit=60)`.
+---
 
-## 2. The problem (one paragraph)
+## 0. TL;DR and the one live decision
 
-n blocks (100–300 in training), each with 1–4 stacked polygon layers and 2–8 fixed orientations, must each
-be assigned to one of m rectangular bays (2–5), given an integer position (x, y), an ENTRY day ≥ release,
-and an EXIT day ≥ ENTRY + processing. Co-present blocks in a bay must not overlap at the SAME layer index
-(edge contact legal); a vertical crane rule requires, at any block's ENTRY/EXIT, its layer k to be clear of
-co-present blocks' layers j ≥ k (so a taller block may legally overhang a shorter one only if it enters
-later and exits earlier — LIFO nesting). Objective: minimize w1·(total tardiness) + w2·(bay workload
-imbalance) + w3·(bay-preference regret), with w1 huge (667–29,630/day) — tardiness dominates. Crucial
-structure: w2 and w3 terms depend ONLY on the assignment vector; given assignments, bays are independent.
-The official checker `utils.py` (shapely-based, 5 stages) is ground truth; per-day op order is
-all-EXITs-then-ENTRYs in OUR listed order.
+- **Preliminary submission is IN and safe**: `submission/ogc2026_kestrel_v22.zip`
+  (SHA-256 `d9e581d8bdee3279818f4402b8122d6858ff5444014be528a404c492d95db96a`),
+  emailed ~13:45 KST 2026-07-27, built from git tag `v2.2-slotA`.
+- **CORRECTED TIMELINE (a scripting bug earlier reported the close a day early):**
+  preliminary closes **2026-07-28 14:00 KST** (~16 h from this writing); finals
+  run **Aug 3 14:00 → Aug 14 14:00 KST**; top 30–40 teams advance; awards Sep 4.
+- **Live decision:** the 12 h cooldown ends ~01:45 KST tonight, so ONE more
+  preliminary submission is possible before the close. Standing rule (do not
+  break it): submit only a build that beats v2.2 on the FULL gate ladder
+  (40-instance paired sweep + edge battery + container parity). No current
+  build qualifies: the "hardened" build passed the 40-gate (quality-neutral,
+  +0.09%) but has not been container-verified; the raster build is not fully
+  gated. **Default: let v2.2 stand.** If you finish P0 of `CODEX-PLAN-finals.md`
+  tonight AND it clears the full ladder by ~10:00 KST, that is the only
+  legitimate use of the slot. Remember: the newest accepted submission REPLACES
+  the old one even if worse — teams MSS (2→36) and A17 (4→29) died exactly there.
 
-## 3. What exists (chronological)
+## 1. Competition facts (verified against the live site + official checker code)
 
-- **v1 "kestrel"** (written by GPT-5.6 Codex, 811 lines, `submission/myalgorithm_v1_backup.py`): anytime
-  single-process heuristic. Safety invariant: co-present blocks keep disjoint interiors of the UNION of all
-  their layers (stronger than the rules → crane feasibility for free, any same-day op order safe).
-  Pipeline: fit-aware serial fallback (checker-verified immediately) → multi-start construction under 5
-  priority rules (fast rectangle-envelope mode with row bitsets, then true-polygon mode with contact
-  candidates, DE-9IM `relate_pattern("2********")` overlap tests) → improvement: blame-ordered single-block
-  reinsertion sweeps + ruin-and-recreate (3 destroy methods, q ≤ 12) with stagnation kicks. Every promotion
-  passes the bundled official checker; deadline reserve 4%; global try/except returns last verified
-  incumbent. **Never infeasible by construction.**
-- **v2 (my stretch, backed up as the current `submission/myalgorithm.py`)**, four additive patches:
-  1. **Pairwise collision-verdict cache** keyed by relative displacement (id(P), id(Q), x−u, y−v) — exact
-     shapely verdicts, translation-invariance re-derivation; only skips recomputation.
-  2. **Delta-objective reinsertion sweep** (O(bays) imbalance delta per trial instead of O(n) rescan) +
-     per-(block, bay) orientation-order cache.
-  3. **Peak-window flush** destroy (4th method): evict up to 48 blocks entering one bay around a blamed
-     block's entry date, re-time jointly under 4 rotating repair orderings (coordinated re-timing move).
-  4. **4-process portfolio**: workers = diversified variants (seed bump 7919·v, construction-mode
-     rotation); each streams checker-verified incumbents to the parent via a queue (throttled 0.5 s), so a
-     worker killed at deadline still contributes; parent picks min-objective; limits < 20 s or n < 8 use
-     the single-process path; any multiprocessing failure falls through to single-process with remaining
-     budget.
-- **v2.1 (current)**: after the 40-instance gate showed 2 regressions (prob_35 +1.6%, prob_36 +5.0%),
-  worker 0 now runs v1's EXACT legacy destroy/repair schedule (`legacy=True`: methods %3, fixed repair
-  order) — so the portfolio can never search worse than v1 by construction; workers 1–3 explore the new
-  operators. Solo re-runs confirm: prob_35 → 5,586,483 (−6.9% vs v1), prob_36 → 407,802 (−3.3%), prob_13
-  win preserved (119,955, −56%).
+- Problem: n (100–300) irregular multi-layer polygonal blocks → m (2–5)
+  rectangular bays; choose bay, integer (x, y), orientation, ENTRY/EXIT days.
+  Constraints: containment; same-layer-index interior-disjointness among
+  co-present blocks; vertical crane rule (layer k must clear co-present layers
+  j ≥ k at ENTRY/EXIT); per day all EXITs execute before all ENTRYs, in our
+  listed order. Objective: `w1·tardiness + w2·workload_imbalance +
+  w3·preference_regret`, w1 dominant (667–29,630/day).
+- `ogc2026/baseline/utils.py` = the official checker = ground truth. Read-only.
+- Server: Ubuntu 24.04, Python 3.12, shapely 2.1.2, 4 cores (cpulimit
+  *throttling*), 16 GB, gurobipy 13 LICENSED + xpress + ortools, no internet.
+  Time limits 30 s–30 min (2025 finals precedent: 14 instances, 30–600 s).
+- Submission: email ONE zip to submission@optichallenge.com from the registered
+  team address; `myalgorithm.py` at zip root; ≤ 15 MB; never include utils.py;
+  12 h cooldown; infeasible/crash/timeout = **−1 per instance** (catastrophic
+  under rank scoring).
+- Public intel: leaderboard JSON (no auth):
+  `https://d32m8h9cownzsg.cloudfront.net/public/leaderboard_group/latest.json`
+  (`scripts/poll_leaderboard.py` diffs a watchlist). Hidden set currently
+  P1–P6, may be augmented in finals. Prior-edition finalist code is officially
+  open-sourced (adapt WITH citation): local copy `reference-ogc2024-winner/`.
+  Current-2026 competitor repos are IDEAS ONLY — copying = plagiarism =
+  award revocation (rule 5.3).
 
-## 4. Proven results (all via official checker, local M-series Mac, /opt/anaconda3 python + shapely 2.0.7)
+## 2. What was built (version history, all objectives via the official checker)
 
-- **40-instance sweep @60 s, v1 vs v2**: 23 wins / 15 ties / 2 regressions (both since fixed in v2.1),
-  0 infeasible, total objective 254.75M → 247.02M (−3.0%). Set-1 (loose): obj1=0 everywhere except
-  prob_20 (5 tardy days); huge wins from preference repatriation + tardiness kills (prob_13: 4→0 tardy
-  days, −52%; prob_14: 7→0, −65%; prob_1: 8,847→1,499 which EQUALS the assignment-only theoretical floor).
-  v2 correctly trades cheap imbalance (w2≈4–10) for expensive preference/tardiness.
-- **120 s probes**: prob_1 = 1,499 (provable floor), prob_9 = 50,885, prob_25 = 351,265 (unchanged —
-  capacity-bound). Organizer baseline: 795k / 2.36M / 824k. Best public 2026 competitor (etharthinas):
-  151k / 106k / ~898k. We beat every measurable artifact.
-- **Edge battery** (running now, partial): solo re-runs green; pending: n=600 stress, m=1, non-contiguous
-  orientation IDs (an explicit FAQ trap), w1=0, w2-dominant, n=5, zero-slack, time limits 10/21/30 s,
-  600 s soak with peak-RSS sampling. One known gap: portfolio only tested under macOS spawn; server uses
-  Linux fork (safer primitive + clean fall-through to single-process, but untested in Docker yet).
+| build | what | evidence |
+|---|---|---|
+| v1 "kestrel" | GPT-5.6 Codex original: anytime heuristic, union-of-layers safety invariant, checker-gated promotions, never-infeasible fallback chain | beat organizer baseline ~20×; beat best public competitor 1.5–19× |
+| v2 | + 4-process portfolio (diversified seeds/mode-orders, streamed incumbents), pairwise-verdict cache (relative displacement), delta-objective sweep, peak-window-flush destroy | 40-sweep: 23 wins / 15 ties / 2 regressions vs v1, −3.0% total |
+| v2.1 | worker 0 pinned to v1's exact legacy schedule ⇒ portfolio can never search worse than v1 | both regressions flipped to wins (prob_35 −6.9%, prob_36 −3.3%) |
+| **v2.2 = SHIPPED** | + mp drain-hang fix (torn-message hang after terminate → −1 class), + raw-vertex containment bbox fix (checker-exact; fuzz-found), XBAY/LAYER_TRUE dormant | full gate PASS; **parity battery in Ubuntu container 14/14**; fork kill-test PASS |
+| finals branch HEAD | + audit hardening: P=0 dwell guard, degenerate-polygon proxy orientations, huge-bay grid cap, deadline-aware preprocessing (0.33 s → 0.05 s at tiny limits), env-flags → module constants | 40-gate PASS (+0.09%, quality-neutral); synthetic repros all feasible; NOT container-verified yet |
 
-## 5. Intelligence (from a 16-agent orchestrated recon; integrity rule 5.3: prior-edition open-source code
-   = adapt WITH citation; current-2026 competitor repos = ideas only, NEVER copy)
+**Robustness evidence for the shipped build:** 1,420 randomized adversarial
+instances across 3 fuzz lanes (incl. one under Linux fork in the parity
+container) — zero failures; 1.05 M differential geometry cases — zero
+false-accepts; kill-a-worker mid-run (spawn AND fork) — returns feasible;
+600 s soak peak RSS 360 MB (1.4 GB under fork ×4 workers) vs 16 GB.
 
-- Leaderboard is public JSON: https://d32m8h9cownzsg.cloudfront.net/public/leaderboard_group/latest.json
-  (400 teams, 39 tiers, scores hidden). Tier 1: tishii24 (AtCoder elite, expect compiled Rust annealer),
-  古法编程, ChatOPT, OPTALL, etc. Qampo (professional DK optimization firm) only Tier 3 — the field is
-  beatable.
-- OGC 2024/2025 finalist code is officially open-sourced (github.com/ogchallenge/ogc releases). The 2024
-  winner (DMS): thin Python → pybind11 C++ ALNS ⇄ Gurobi set-partitioning, per-instance time tables,
-  SPARE_TIME clock paranoia. 2025 problem (RoRo stowage with port-LIFO) is a structural cousin — their
-  finalists' code is legal study material.
-- Organizer DNA: the crane-lift/overhang tier is the designed differentiator (Woo lab: crane-LIFO +
-  nesting; K. Lee/Joung: knapsack/IP). Instance-generation writeups get published post-competition.
-- Full research corpus lives in `research/` (checker rules audit with line refs, 40-instance analytics,
-  4 literature sweeps, 3 solver designs + judge synthesis "KEEL", action plan).
+## 3. Post-submission finals work (the valuable stuff — all on branch `finals`)
 
-## 6. The known ceiling and the next big lever
+Read `FINDINGS-finals.md` (F1–F10) in full; the headlines:
 
-v1/v2's union-footprint invariant FORFEITS: (a) same-layer-disjoint packings where different layers overlap
-in plan view, (b) deliberate overhangs (35% of multi-layer blocks are "mushrooms"; median bbox fill 0.67).
-The congested instances (prob_25/27/33/38/40, peak space-time demand up to 1.61× bay area) are exactly
-where our remaining objective sits (90%+ tardiness) and where the union invariant caps packing density.
-**The layer-true predicate task** (full spec: `submission/TASK-layer-true-predicate.md`) replaces it with
-exact per-layer + crane j≥k semantics + EXIT-monotone overhang rule (strict exit_N < exit_E first
-iteration). NON-NEGOTIABLE GATE: differential test vs utils.py with ZERO false-accepts on ≥10⁴
-near-contact placements, then full 40-instance sweep beating v2.1 totals. Target: Slot B or finals.
+1. **Root cause of congested-set tardiness found and prototyped away.** For
+   n > 160 construction packs bounding RECTANGLES: envelope occupancy 0.87 vs
+   true polygon occupancy 0.44 ⇒ **38% of bay area wasted**. Exact polygon
+   construction was unaffordable (> 600 s at n=250) — the new raster kernel
+   (`submission/raster_kernel.py`, soundness proof in docstring, differential
+   gate 0 false-accepts, batch 0.61 µs/position = 30×) brings it to **83 s**.
+   Paired 240 s A/B on 4 congested instances: **−4.0% total** (prob_40 −19.7%,
+   prob_33 −13.9%, prob_38 −12.3%, prob_27 +19.6% — the one over-subscribed
+   instance where re-timing beats packing; a startup budget policy fixes this,
+   spec'd in CODEX-PLAN P0.3).
+2. **Certified lower bounds** (`tests/geometric_lb.py`, validated against 240
+   checker-verified solutions, 0 violations): tardiness is 85–97% of our
+   objective on ten congested instances and mostly NOT forced by physics;
+   certified headroom up to 1510× (prob_23). Only prob_8 proven optimal.
+   ⇒ scheduling search is the other big lever besides geometry.
+3. **Dead ends closed with measurements** (don't reopen): per-layer overhang
+   feasibility (0 accepts / 250,286 tests — construction order anti-correlated
+   with the required exit precedence); DFF area bounds (dominated, 0.974–1.000);
+   ALNS weight adaptation (0.14% per 25-implementation meta-analysis);
+   monolithic MIP (1/25 feasible at 1 h in closest published analogue).
+4. **Deep-research-backed implementation plan**: `CODEX-PLAN-finals.md` — P0
+   raster integration + budget policy, P1 CP-SAT bay-window repair oracle
+   (attacks item 2; uses the licensed solvers), P2 LAHC + big destroys +
+   dynasearch, P3 squeaky-wheel blame propagation, P4 portfolio
+   diversification, P5 sparrow-style overlap-tolerant separation (research
+   bet), P6 Cython kernels. Expected-value table and full gate specs inside.
 
-## 7. Remaining backlog (from the judged action plan, by value/effort)
+## 4. Discipline that must survive the handoff
 
-5. Cross-bay rebalancing ops regime-gated by weights (preference-repatriation for tardy blocks; Z2-swap
-   for w2-heavy instances p25/p36/p40-like) — "bay-assignment myopia" is the known open lever nobody
-   public has built.
-6. Congestion-adaptive destroy sizing; elite restart pool instead of full-reconstruction kicks.
-7. Local lower-bound harness (assignment-only floor; merged-bay EDD tardiness LB) to direct tuning.
-8. Permanent submission gate = 40 instances × {30, 60, 120, 300, 600} s × 2 seeds + edge battery.
-9. Fail-fast geometry surrogates (inner-circle/pier prechecks), profiling-gated.
-10. Finals bets (pick ≤2, VOI-gated): numba bit-raster kernel; overlap-tolerant separation for
-    over-subscribed instances (peak demand >110%); bounded Gurobi/CP-SAT assignment seed.
+1. **Measurement protocol F10:** idle machine (`pgrep`, `docker ps` first),
+   paired sequential arms per instance, checker objectives only. We measured
+   ~8% phantom regressions and one sign-flipped A/B caused purely by CPU
+   contention. Harness: `scratchpad/bisect/paired_gate.py` pattern.
+   Reference totals (paired, un-contended, 60 s): 226,420,836.
+2. **Gate ladder before any submission:** 40-instance paired sweep (60 s; +240 s
+   congested for construction changes) → edge battery → container parity
+   (`docker/run_parity.sh`) → zip via `scripts/build_submission_zip.sh <tag>
+   <name>` (byte-compares zip against the git tag) → fresh-container smoke of
+   the actual zip.
+3. Never edit: `utils.py`, `myalgorithm_v1_backup.py`, training instances,
+   `reference-ogc2024-winner/`. Never rewrite ledgers — append.
+4. macOS gotcha: any driver script that calls `algorithm()` MUST have an
+   `if __name__ == "__main__":` guard (spawn re-imports it per worker;
+   we process-bombed ourselves twice).
 
-## 8. What a better prompt/roadmap should optimize (suggested asks for the AI reading this)
+## 5. Mistakes made and corrected (so you don't re-trust stale claims)
 
-- Attack the layer-true predicate design: is the strict EXIT-monotone rule leaving too much on the table?
-  Is there a cheap sound relaxation for same-day exit ties (roof-first emission ordering)?
-- Congested-instance strategy: with peak demand >100% (prob_27: 119%), which blocks to sacrifice
-  (delay far) and how to choose them — a Lagrangian/knapsack view of "who eats the tardiness"?
-- Portfolio composition: with 4 workers, what's the optimal variant mix (legacy/explorer/rect-biased/
-  congestion-specialist) per regime (loose/congested/preference-locked/w2-heavy)?
-- Risk review of the multiprocessing parent (queue semantics, terminate-at-deadline, fork vs spawn).
-- Time-limit adaptivity: 2025 finals had a 30 s instance; what should be cut first under 30 s with n=300?
+- **Deadline off-by-one-day** (this file, §0): scripts computed the close as
+  07-27 14:00; the real close is **07-28 14:00 KST**. The submission simply
+  went in ~24 h early — no harm, but earlier chat urgency was wrong, and one
+  more submission window exists tonight.
+- **Contended gate verdicts retracted** (F10): a "+11.6% FAIL" was pure
+  contention; re-run paired/idle it was +0.09% PASS.
+- **"prob_1 = 1,499 is the proven floor" — RETRACTED** (RESULTS.md): the claim
+  came from a heuristic estimate; the LP bound is 988. Never present it as
+  proof in the technical report.
+- The 30 OVERTIME files in `fuzz_failures/` are self-contention artifacts
+  (window 09:19–09:39 while an external audit ran); all three worst repros pass
+  solo. Kept for the record.
 
-## 9. File map (local repo `/Users/vedantmoghe/Downloads/optichallenge/`)
+## 6. Jobs possibly still running / recent artifacts
 
-- `submission/myalgorithm.py` — v2.1 (current); `myalgorithm_v1_backup.py` — v1; `ogc2026_kestrel_v2.zip`
-  — needs rebuild to v2.1 after battery passes; `TASK-layer-true-predicate.md` — GPT-5.6 task spec.
-- `STRATEGY.md` — full KEEL strategy; `HANDOFF.md` — this file; `research/00–14` — all agent reports;
-  `reference-ogc2024-winner/` — 2024 winner code+slides; `ogc2026/baseline/utils.py` — official checker
-  (ground truth); training instances in `train 2/` (prob_1–20, loose) and `train/` (prob_21–40, congested).
+- `scratchpad/bisect/full_compare.py` — full 40-instance kestrel-vs-raster
+  paired comparison at 60 s and 240 s (32/60 runs done at this writing);
+  results append to `COMPARISON-kestrel-vs-raster.md` §5.2. Keep the machine
+  otherwise idle until it finishes, or kill it (`pkill -f full_compare`) and
+  rerun later — partial results are in `scratchpad/bisect/{C,D}/fc*_prob_*.json`.
+- Fuzz lanes and the L1 marathon are stopped. Docker image `ogc-parity` is
+  built and ready.
+
+## 7. File map
+
+| path | what |
+|---|---|
+| `submission/myalgorithm.py` | solver, finals branch (hardened) |
+| `submission/ogc2026_kestrel_v22.zip` | THE shipped artifact (from tag `v2.2-slotA`) |
+| `submission/raster_kernel.py` | sound raster geometry kernel (P0 ships it) |
+| `submission/myalgorithm_v1_backup.py` | v1 reference, read-only |
+| `submission/TASK-layer-true-predicate.md` | historical spec (dead end — see F1) |
+| `CODEX-PLAN-finals.md` | **the implementation plan — start here** |
+| `FINDINGS-finals.md` / `RESULTS.md` / `DECISIONS.md` | evidence ledgers |
+| `COMPARISON-kestrel-vs-raster.md` | engine comparison + improvement scope |
+| `STRATEGY.md` | original KEEL strategy (context; M2 = the raster kernel) |
+| `research/00–14` | 16-agent recon: rules audit (line-refs!), instance analytics, literature, leaderboard/competitor intel, action plans |
+| `tests/` | `l1_differential.py`, `raster_gate.py`, `fuzz_instances.py`, `mp_robustness.py`, `lower_bounds.py`, `geometric_lb.py` |
+| `docker/` | server-parity container + battery + runbook |
+| `scripts/` | `build_submission_zip.sh`, `poll_leaderboard.py` |
+| `scratchpad (session tmp)` | harnesses & prototypes: `bisect/paired_gate.py`, `lt_diag/myalgorithm_raster.py` (P0 prototype), `lt_diag/myalgorithm_contact.py` |
+| git | branch `finals` (all work), tag `v2.2-slotA` (shipped, frozen) |
+
+## 8. Suggested first day for the new owner
+
+1. Read `CODEX-PLAN-finals.md` end to end (30 min). Skim FINDINGS F1–F10.
+2. Let `full_compare` finish; paste its tables into
+   `COMPARISON-kestrel-vs-raster.md` §5.2.
+3. Implement P0 (raster port + budget policy) — the prototype is 90% of it.
+   Gate per §4.2. If it clears the FULL ladder before ~10:00 KST 07-28 you may
+   use tonight's submission window; otherwise bank it for finals Aug 3.
+4. Then P2 (three small gated edits) and P1 (the oracle — the biggest bet).
+5. Keep every result in the ledgers; the technical report for finals is
+   assembled from them (finalist code + reports are published — write
+   accordingly, cite the literature listed in CODEX-PLAN §9 and the
+   independently-re-derived competitor-intel notes in DECISIONS.md).
