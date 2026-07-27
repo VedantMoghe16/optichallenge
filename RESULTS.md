@@ -87,3 +87,12 @@ zero-slack, releases up to 500, time limits 6–60 s. Zero crashes, zero infeasi
 overtime, zero hangs since the two fixes (raw-bbox containment; harness __main__ guard).
 Earlier tonight the same campaign found and fixed those two defects — the shipped Slot A
 artifact (sha256 d9e581d8…) contains both fixes.
+
+## 2026-07-27 overnight campaign — FINAL (~09:00 IST / 12:30 KST)
+Lanes at loop close (still running to their own 240-min budgets, ending ~10:00 IST):
+lane A 480 OK / lane B 460 OK / lane C (Linux fork container) 480 OK = 1,420 randomized
+adversarial instances, ZERO failures of any class. L1 marathon: 188 clean batches =
+940,000 differential placement cases under shapely 2.1.2, ZERO false-accepts.
+Campaign totals incl. the discovery phase: 2 solver defects found+fixed (raw-bbox
+containment; mp drain-hang), 1 harness defect fixed, both fixes shipped in v2.2-slotA
+(sha256 d9e581d8bdee3279818f4402b8122d6858ff5444014be528a404c492d95db96a).
