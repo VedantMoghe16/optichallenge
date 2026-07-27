@@ -1,0 +1,2 @@
+- myalgorithm.py는 OGC2025에서 명시하고 있는 Python 환경에서 그 자체로 실행 가능합니다.
+- path_backtracking 함수는 OGC2025에서 제공된 baseline 알고리즘에서의 동일한 이름의 함수를 참고하였습니다.
