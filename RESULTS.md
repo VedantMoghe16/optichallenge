@@ -200,3 +200,19 @@ CONCLUSION / WHERE THE FINALS EFFORT SHOULD GO
    functional valid under interior-disjointness alone is dominated by area (the DFF result
    above is the concrete evidence). Certifying the congested set would require exact
    irregular-packing feasibility reasoning, which is out of scope for the finals window.
+
+### 2026-07-27 ~18:40 KST — geometric LB: hardened soundness + re-runnable against any build
+`tests/geometric_lb.py` now takes `--results DIR` (compare against another build's
+res_prob_*.json; default stays gateB/v21 = v2.2-slotA) and `--crosscheck DIR ...`.
+A lower bound must hold for EVERY feasible solution, so the bounds were re-validated
+against all six checker-verified 40-instance solution sets on disk
+(gateB/v21 246.24M, gateB/cand 245.52M, gateC/base 263.60M, gateC/new 259.99M,
+sweep/v1 254.75M, sweep/v2 247.02M): **240/240 solutions, 0 violations of LB ≤ objective
+and 0 of LB_Z1 ≤ Z1** — 6x the required evidence, and the two arms with the *lowest*
+achieved Z1 (gateB/cand 28,729; gateB/v21 28,864) are the tightest test of the Z1 bound.
+LB total over 40 = 3,720,863; best build / LB = 65.99x.
+Note gateC/base+new (the raster-decoder A/B arm) are 5-7% WORSE in total objective than
+gateB/v21, so v21 remains the reference for the report's ratio columns.
+Reproducibility: engine L (the only non-deterministic piece, 25 s HiGHS cap) contributes
+only on prob_27 (71 with L, 67 without); on a timeout the bound falls back to max(W,F,R),
+so a slower machine can report a weaker bound but never an invalid one. Full run 425-515 s.

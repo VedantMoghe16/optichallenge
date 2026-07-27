@@ -239,6 +239,18 @@ Rejected after implementation/measurement (all *valid*, none useful here):
    polygons are smaller and only a subset of blocks has K_i > 1, so it is
    dominated by k = 0 on every instance.  Not shipped.
 
+USAGE.  `python tests/geometric_lb.py [--results DIR] [--crosscheck DIR ...]`
+        `python tests/geometric_lb.py selftest`
+--results points the comparison columns at another build's res_prob_*.json;
+--crosscheck re-validates the bounds against further solution sets (a valid lower
+bound must hold for EVERY feasible solution, so more sets = a stronger test).
+
+REPRODUCIBILITY.  Engine L runs HiGHS under a 25 s cap.  If the cap is hit the
+engine contributes nothing (`res.success` False -> 0.0) and the reported bound
+falls back to max(W, F, R), which is still valid -- so a slower machine can only
+report a WEAKER bound, never an invalid one.  Only prob_27 depends on engine L
+at all (71 with L, 67 without).  Everything else is deterministic.
+
 DIAGNOSTIC (NOT A BOUND).  LB_Z1(delta) is engine W/L run with capacity
 delta*C_Q.  It is a valid lower bound only under the *unproven* hypothesis
 "at no instant can layer-0 polygons occupy more than a delta fraction of a bay".
@@ -247,6 +259,7 @@ packing inefficiency; it is never added to the reported LB.
 """
 import glob
 import json
+import os
 import math
 import sys
 import time
@@ -261,8 +274,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from lower_bounds import lb_assign, lb_tardiness      # noqa: E402
 
 BASE = Path(__file__).resolve().parent.parent
-SHIPPED = Path("/private/tmp/claude-501/-Users-vedantmoghe-Downloads-optichallenge/"
-               "828d3afa-14fe-4679-bfb6-c94c0e22ac75/scratchpad/gateB/v21")
+# Directory holding res_prob_*.json (instance / objective / obj1..3) of the build we
+# compare against.  Default = shipped gateB v21 (== v2.2-slotA).  Override with
+#   python tests/geometric_lb.py --results <DIR>      or   GEOM_LB_RESULTS=<DIR>
+# so the table can be regenerated against a newer build without touching the bounds.
+SHIPPED = Path(os.environ.get(
+    "GEOM_LB_RESULTS",
+    "/private/tmp/claude-501/-Users-vedantmoghe-Downloads-optichallenge/"
+    "828d3afa-14fe-4679-bfb6-c94c0e22ac75/scratchpad/gateB/v21"))
 EPS = 1e-9
 
 # ---------------------------------------------------------------------------
@@ -699,11 +718,15 @@ def diagnostics(inst, geo, Bset):
     return peak, util
 
 
-def main():
+def main(results_dir=None, extra_dirs=()):
+    src = Path(results_dir) if results_dir else SHIPPED
     ours = {}
-    for f in SHIPPED.glob("res_prob_*.json"):
+    for f in src.glob("res_prob_*.json"):
         r = json.loads(f.read_text())
         ours[r["instance"]] = r
+    if not ours:
+        raise SystemExit(f"no res_prob_*.json under {src} -- pass --results <DIR>")
+    print(f"# reference solutions: {src}  ({len(ours)} instances)")
     hdr = (f"{'instance':<9}{'ours_obj':>13}{'old_LB':>13}{'new_LB':>13}"
            f"{'ours/LB':>9}{'ours_Z1':>9}{'LB_Z1':>8}{'peak':>7}{'util':>6}  tight")
     print(hdr); print("-" * len(hdr))
@@ -728,6 +751,24 @@ def main():
         rat = "" if not oo or new <= 0 else f"{oo / new:.2f}"
         print(f"{name:<9}{oo:>13,.0f}{old:>13,.0f}{new:>13,.0f}{rat:>9}"
               f"{oz1:>9,.0f}{z1:>8}{peak:>7.2f}{util:>6.2f}  {tag}", flush=True)
+
+    if extra_dirs:
+        print("\nCROSS-CHECK: the same bounds against every other checker-verified")
+        print("solution set available (a valid LB must hold for ALL feasible solutions).")
+        by = {r["name"]: r for r in rows}
+        print(f"{'result set':<26}{'n':>4}{'LB>obj':>8}{'LB_Z1>Z1':>10}{'total obj':>16}")
+        for dname in extra_dirs:
+            dd = Path(dname)
+            n = v1 = v2 = 0; tot = 0.0
+            for f in sorted(dd.glob("res_prob_*.json")):
+                r = json.loads(f.read_text())
+                b = by.get(r.get("instance"))
+                if b is None or not r.get("feasible"):
+                    continue
+                n += 1; tot += r["objective"]
+                v1 += b["new"] > r["objective"] + 1e-6
+                v2 += b["z1"] > r["obj1"] + 1e-6
+            print(f"{dd.name if dd.name else dname:<26}{n:>4}{v1:>8}{v2:>10}{tot:>16,.0f}")
 
     print("\nSANITY: a bound above the achieved (checker-verified) objective is a BUG.")
     bad = [r for r in rows if r["ours"] is not None and r["new"] > r["ours"] + 1e-6]
@@ -814,5 +855,12 @@ if __name__ == "__main__":
     if len(sys.argv) > 1 and sys.argv[1] == "selftest":
         selftest()
         raise SystemExit(0)
-    main()
+    rd = None
+    if "--results" in sys.argv:
+        rd = sys.argv[sys.argv.index("--results") + 1]
+    extra = []
+    if "--crosscheck" in sys.argv:                 # extra solution sets to validate against
+        extra = [a for a in sys.argv[sys.argv.index("--crosscheck") + 1:]
+                 if not a.startswith("--")]
+    main(rd, extra)
     print(f"\ntotal wall time {time.time() - t0:.0f}s")
