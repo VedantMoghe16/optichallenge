@@ -127,18 +127,29 @@ def _proxy_orient(oi, raw_layers) -> Orient:
     admits under it is still accepted by the checker, which keeps using the
     raw vertices and remains authoritative.
     """
-    pts = [(float(x), float(y)) for layer in raw_layers for x, y in layer]
     if raw_layers and raw_layers[0]:
-        ref_x, ref_y = float(raw_layers[0][0][0]), float(raw_layers[0][0][1])
-    elif pts:
-        ref_x, ref_y = pts[0]
+        ref_x = float(raw_layers[0][0][0])
+        ref_y = float(raw_layers[0][0][1])
     else:
         ref_x = ref_y = 0.0
-    rel = [(px - ref_x, py - ref_y) for px, py in pts] or [(0.0, 0.0)]
-    x0 = min(p[0] for p in rel)
-    y0 = min(p[1] for p in rel)
-    x1 = max(p[0] for p in rel)
-    y1 = max(p[1] for p in rel)
+    # Single-pass min/max: this runs on the deadline-pressed preprocessing
+    # path, where allocating intermediate vertex lists is measurable.
+    x0 = y0 = float("inf")
+    x1 = y1 = float("-inf")
+    for layer in raw_layers:
+        for vx, vy in layer:
+            vx = float(vx) - ref_x
+            vy = float(vy) - ref_y
+            if vx < x0:
+                x0 = vx
+            if vx > x1:
+                x1 = vx
+            if vy < y0:
+                y0 = vy
+            if vy > y1:
+                y1 = vy
+    if x0 > x1:                       # no vertices at all
+        x0 = y0 = x1 = y1 = 0.0
     if x1 - x0 < DEGEN_MIN_SIDE:
         x1 = x0 + DEGEN_MIN_SIDE
     if y1 - y0 < DEGEN_MIN_SIDE:
@@ -146,9 +157,10 @@ def _proxy_orient(oi, raw_layers) -> Orient:
     poly = Polygon([(x0, y0), (x1, y0), (x1, y1), (x0, y1)])
     bbox = (x0, y0, x1, y1)
     n = max(1, len(raw_layers))
-    return Orient(oi, poly, bbox, float(poly.area),
-                  layers=tuple([poly] * n),
-                  layer_bboxes=tuple([bbox] * n))
+    layers = (poly,) * n
+    return Orient(oi, poly, bbox, (x1 - x0) * (y1 - y0),
+                  layers=layers,
+                  layer_bboxes=(bbox,) * n)
 
 
 def _precompute_geometry(prob, deadline=None):

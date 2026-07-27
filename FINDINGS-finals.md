@@ -115,3 +115,52 @@ construction becomes affordable for n > 160, then re-test F6 contact scoring on
 top of it. Open items: S=2 map is anomalously slow (93 ms — FFT sizing, not on
 the S=4 target path); consider per-block S escalation to shrink the 6.2%
 conservative-reject rate on hard blocks.
+
+## F8. Raster integration: exact polygon construction is now affordable at n=250
+Integration decision (safety): the kernel rasterises the **union footprint**, not
+per-layer masks.  `_emit`'s same-day operation ordering is justified by the
+union-disjoint invariant; per-layer semantics would invalidate that justification
+(this is exactly why LAYER_TRUE must stay off).  Union-rastering therefore keeps
+the current semantics EXACTLY and only makes the test batch-parallel.  Every
+raster-selected position is still confirmed by the exact shapely predicate before
+commit, so the kernel narrows the search without becoming the arbiter.
+Consequently the historical `n_blocks > 160` skip of exact construction is lifted
+when RASTER_EXACT is on, with the first pass capped at half the remaining budget
+(a pass that cannot finish can never consume the run; the rectangle incumbent is
+already checker-gated).
+
+ONE exact-polygon construction pass, prob_38 (n=250):
+| decoder | wall time | feasible | objective | Z1 |
+|---|---|---|---|---|
+| shapely candidate scan | **did not finish in 240 s** (>600 s earlier) | — | — | — |
+| raster batch map | **83.0 s** | yes | 66,278,940 | 4,864 |
+For reference the shipped build's FULL 60 s portfolio run scores 74,576,673 with
+Z1 = 5,485, so a single construction pass is already **-11.1% objective and
+-621 tardy days** — the first measured recovery of the 38% envelope waste (F4).
+Matched-budget full-`_solve` A/B (240 s, prob_38 + prob_40) in flight; the
+40-instance gate follows before anything is proposed for a submission.
+
+## F9. Geometric lower bounds (agent track, tests/geometric_lb.py)
+First non-trivial Z1 bounds on the congested set: prob_27 LB_Z1 = 71 and
+prob_38 LB_Z1 = 115 (objective LB 31,156 -> 977,799 = 31x and
+17,678 -> 1,550,973 = 88x).  Congested-group LB total 738,179 -> 3,218,117
+(4.36x).  Sanity: LB > ours on 0/40 and LB_Z1 > ours_Z1 on 0/40; a hand-checked
+self-test (five 5x5 squares in a 10x10 bay) returns exactly the true optimum
+Z1 = 2.  Strongest engine: a deadline-window cover (whole P_i must fit in
+[R_i, D_i + x_i), fractional knapsack over forced window overlap) -- the
+tardiness analogue of Gale-Hoffman.  Proven dead ends, with measurements:
+Fekete-Schepers DFFs on unit-cell coverage give d^u/area = 0.974-1.000 (every
+non-trivial DFF is dominated by plain area), the naive "sum of bbox widths"
+strip bound is INVALID here (interlocking concave layers overlap in x while
+staying interior-disjoint; the rigorous slab repair gains +29% on prob_27 and
+0 elsewhere because 90-degree orientations make min_o bbox height small), and
+the crane rule adds <1% of capacity.
+STRATEGIC CONSEQUENCE: w1*(ours_Z1 - LB_Z1) is 85-97% of our objective on ten
+congested instances, and forced density peaks at only 0.54-0.84 on all but
+prob_27/38 -- the physics does not require that tardiness.  A diagnostic
+(explicitly NOT a bound) assuming bays can only ever be filled to 50% still
+forces far less tardiness than we incur (prob_40 1,168 vs 6,554; prob_38 1,644
+vs 5,485), so packing inefficiency explains at most ~20-30% of it within that
+relaxation and the remainder is search headroom.  Largest certified headroom:
+prob_23 1510x, prob_33 1078x, prob_39 1067x, prob_30 308x, prob_35 244x,
+prob_40 219x.  Only prob_8 is proven optimal.
