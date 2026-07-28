@@ -114,8 +114,33 @@ limits and better at 240 s+. Both numbers matter: the 2025 finals included a
 30 s instance, and limits reportedly range from tens of seconds to tens of
 minutes.
 
-*(Phase 1 = 40 instances @ 60 s; Phase 2 = congested 20 @ 240 s. Results are
-appended to this file when the run finishes.)*
+
+### 5.2 FINAL — full 60-run paired comparison (completed 2026-07-27 ~21:20 IST)
+
+Log: `experiments/results/full_compare_COMPLETE_60runs.log`; 120/120 result
+JSONs in `experiments/results/full_compare_json/`; zero infeasible, zero
+failed, zero missing runs; log terminates with `FULL_COMPARE_DONE`.
+
+**Phase 1 (all 40 @ 60 s): kestrel 227,458,029 vs raster 252,861,564 (+11.17%)**
+— the raster pass cannot finish inside 60 s and the prototype wrongly replaces
+the working scan at n ≤ 160; expected and diagnostic, not a verdict on the
+kernel.
+
+**Phase 2 (congested 20 @ 240 s): kestrel 216,974,102 vs raster 212,603,809
+(−2.01%)** with a razor-sharp size boundary:
+
+| group | result |
+|---|---|
+| prob_21–30 (n = 100–150) | raster loses ALL TEN, +20% to +104% (legacy scan was already exact there) |
+| prob_31–40 (n = 200–250) | raster WINS 7/10: prob_35 −45.1%, prob_39 −22.2%, prob_40 −19.8%, prob_31 −14.3%, prob_33 −14.3%, prob_38 −11.7%, prob_37 −9.1%, prob_32 −6.4%; small losses prob_34 +2.4%, prob_36 +5.6% (both preference/Z2-weight regimes where w1 is tiny) |
+
+**Activation rule confirmed by the data**: raster construction only when
+n > 160 AND budget ≥ 1.6 × estimated pass cost; optional refinement — skip
+when the instance is preference-locked/Z2-heavy (w1·1day worth less than a few
+regret points: prob_34/36 class). With that dispatch the selective build keeps
+only the wins: aggregate −14.7% on the seven winning n≥200 instances, ~0
+elsewhere.
+
 
 ---
 
