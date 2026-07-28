@@ -1,0 +1,105 @@
+{
+  "baseline_sha256": "5e852f1631e377a6b8f3cfaf69c5eb26b5091b7c621b96cec637cb71a6d42061",
+  "baseline_total": 16441.0,
+  "candidate_infeasible": [],
+  "candidate_sha256": "e53dea8a5c5caecf470bfe4ced412c02d032ce4f4a129deb2ea56696d3396e3a",
+  "candidate_total": 16441.0,
+  "cp_sat": false,
+  "created_utc": "20260727T213455Z",
+  "delta_pct": 0.0,
+  "explained_regressions": [],
+  "git_head": "f116296cbe0f97061353eeb6f34e39ae3f56e1e2",
+  "instances": [
+    1,
+    2,
+    8
+  ],
+  "instances_over_plus_2_pct": [],
+  "loose_polish": false,
+  "passes_aggregate_gate": true,
+  "passes_full_gate": true,
+  "platform": "macOS-26.5.2-arm64-arm-64bit",
+  "python": "3.12.11 | packaged by Anaconda, Inc. | (main, Jun  5 2025, 08:03:38) [Clang 14.0.6 ]",
+  "raster": false,
+  "rows": [
+    {
+      "baseline": {
+        "elapsed": 114.4487310419936,
+        "feasible": true,
+        "obj1": 0.0,
+        "obj2": 157,
+        "obj3": 2.0,
+        "objective": 1499.0,
+        "problem": "prob_1",
+        "timelimit": 120.0,
+        "violations": []
+      },
+      "candidate": {
+        "elapsed": 113.45933974999934,
+        "feasible": true,
+        "obj1": 0.0,
+        "obj2": 157,
+        "obj3": 2.0,
+        "objective": 1499.0,
+        "problem": "prob_1",
+        "timelimit": 120.0,
+        "violations": []
+      },
+      "delta_pct": 0.0,
+      "instance": 1
+    },
+    {
+      "baseline": {
+        "elapsed": 113.27919216699956,
+        "feasible": true,
+        "obj1": 0.0,
+        "obj2": 144,
+        "obj3": 15.0,
+        "objective": 3690.0,
+        "problem": "prob_2",
+        "timelimit": 120.0,
+        "violations": []
+      },
+      "candidate": {
+        "elapsed": 113.31451599999855,
+        "feasible": true,
+        "obj1": 0.0,
+        "obj2": 144,
+        "obj3": 15.0,
+        "objective": 3690.0,
+        "problem": "prob_2",
+        "timelimit": 120.0,
+        "violations": []
+      },
+      "delta_pct": 0.0,
+      "instance": 2
+    },
+    {
+      "baseline": {
+        "elapsed": 113.33364562501083,
+        "feasible": true,
+        "obj1": 0.0,
+        "obj2": 2413,
+        "obj3": 8.0,
+        "objective": 11252.0,
+        "problem": "prob_8",
+        "timelimit": 120.0,
+        "violations": []
+      },
+      "candidate": {
+        "elapsed": 113.36175704099878,
+        "feasible": true,
+        "obj1": 0.0,
+        "obj2": 2413,
+        "obj3": 8.0,
+        "objective": 11252.0,
+        "problem": "prob_8",
+        "timelimit": 120.0,
+        "violations": []
+      },
+      "delta_pct": 0.0,
+      "instance": 8
+    }
+  ],
+  "timelimit": 120.0
+}

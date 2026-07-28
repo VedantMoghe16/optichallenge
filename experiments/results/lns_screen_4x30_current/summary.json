@@ -1,0 +1,132 @@
+{
+  "baseline_sha256": "5e852f1631e377a6b8f3cfaf69c5eb26b5091b7c621b96cec637cb71a6d42061",
+  "baseline_total": 128408907.0,
+  "candidate_infeasible": [],
+  "candidate_sha256": "972ed4f0deb841309f86c8d8e8a4a8e3280433446004dfebf86701e887fce852",
+  "candidate_total": 129588665.0,
+  "cp_sat": false,
+  "created_utc": "20260727T145747Z",
+  "delta_pct": 0.9187509087667882,
+  "explained_regressions": [],
+  "git_head": "f116296cbe0f97061353eeb6f34e39ae3f56e1e2",
+  "instances": [
+    21,
+    27,
+    33,
+    38
+  ],
+  "instances_over_plus_2_pct": [
+    27
+  ],
+  "passes_aggregate_gate": false,
+  "passes_full_gate": false,
+  "platform": "macOS-26.5.2-arm64-arm-64bit",
+  "python": "3.12.11 | packaged by Anaconda, Inc. | (main, Jun  5 2025, 08:03:38) [Clang 14.0.6 ]",
+  "rows": [
+    {
+      "baseline": {
+        "elapsed": 28.798463917002664,
+        "feasible": true,
+        "obj1": 60.0,
+        "obj2": 1190,
+        "obj3": 2563.0,
+        "objective": 1196330.0,
+        "problem": "prob_21",
+        "timelimit": 30.0,
+        "violations": []
+      },
+      "candidate": {
+        "elapsed": 28.82401483299327,
+        "feasible": true,
+        "obj1": 60.0,
+        "obj2": 1190,
+        "obj3": 2563.0,
+        "objective": 1196330.0,
+        "problem": "prob_21",
+        "timelimit": 30.0,
+        "violations": []
+      },
+      "delta_pct": 0.0,
+      "instance": 21
+    },
+    {
+      "baseline": {
+        "elapsed": 28.818224540998926,
+        "feasible": true,
+        "obj1": 2510.0,
+        "obj2": 643,
+        "obj3": 4116.0,
+        "objective": 35113516.0,
+        "problem": "prob_27",
+        "timelimit": 30.0,
+        "violations": []
+      },
+      "candidate": {
+        "elapsed": 28.870281832991168,
+        "feasible": true,
+        "obj1": 2600.0,
+        "obj2": 2212,
+        "obj3": 4258.0,
+        "objective": 36373424.0,
+        "problem": "prob_27",
+        "timelimit": 30.0,
+        "violations": []
+      },
+      "delta_pct": 3.5880998074929322,
+      "instance": 27
+    },
+    {
+      "baseline": {
+        "elapsed": 28.901903334000963,
+        "feasible": true,
+        "obj1": 2545.0,
+        "obj2": 889,
+        "obj3": 4591.0,
+        "objective": 17665055.0,
+        "problem": "prob_33",
+        "timelimit": 30.0,
+        "violations": []
+      },
+      "candidate": {
+        "elapsed": 28.9468616249942,
+        "feasible": true,
+        "obj1": 2535.0,
+        "obj2": 696,
+        "obj3": 4514.0,
+        "objective": 17584905.0,
+        "problem": "prob_33",
+        "timelimit": 30.0,
+        "violations": []
+      },
+      "delta_pct": -0.45372063659014933,
+      "instance": 33
+    },
+    {
+      "baseline": {
+        "elapsed": 28.939703832991654,
+        "feasible": true,
+        "obj1": 5476.0,
+        "obj2": 1149,
+        "obj3": 4734.0,
+        "objective": 74434006.0,
+        "problem": "prob_38",
+        "timelimit": 30.0,
+        "violations": []
+      },
+      "candidate": {
+        "elapsed": 28.925494832990807,
+        "feasible": true,
+        "obj1": 5476.0,
+        "obj2": 1149,
+        "obj3": 4734.0,
+        "objective": 74434006.0,
+        "problem": "prob_38",
+        "timelimit": 30.0,
+        "violations": []
+      },
+      "delta_pct": 0.0,
+      "instance": 38
+    }
+  ],
+  "timelimit": 30.0
+}

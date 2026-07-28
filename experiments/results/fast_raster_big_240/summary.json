@@ -1,0 +1,78 @@
+{
+  "baseline_sha256": "5e852f1631e377a6b8f3cfaf69c5eb26b5091b7c621b96cec637cb71a6d42061",
+  "baseline_total": 77593401.0,
+  "candidate_infeasible": [],
+  "candidate_sha256": "da7e6d3ab9a48b292fd7a9eb69f43b0e704b1bd0d02c7f675768990d088cee41",
+  "candidate_total": 77904607.0,
+  "cp_sat": false,
+  "created_utc": "20260727T193848Z",
+  "delta_pct": 0.4010727664843561,
+  "explained_regressions": [],
+  "git_head": "f116296cbe0f97061353eeb6f34e39ae3f56e1e2",
+  "instances": [
+    38,
+    40
+  ],
+  "instances_over_plus_2_pct": [],
+  "loose_polish": true,
+  "passes_aggregate_gate": true,
+  "passes_full_gate": true,
+  "platform": "macOS-26.5.2-arm64-arm-64bit",
+  "python": "3.12.11 | packaged by Anaconda, Inc. | (main, Jun  5 2025, 08:03:38) [Clang 14.0.6 ]",
+  "raster": true,
+  "rows": [
+    {
+      "baseline": {
+        "elapsed": 231.03516966701136,
+        "feasible": true,
+        "obj1": 5387.0,
+        "obj2": 2281,
+        "obj3": 5346.0,
+        "objective": 73433233.0,
+        "problem": "prob_38",
+        "timelimit": 240.0,
+        "violations": []
+      },
+      "candidate": {
+        "elapsed": 231.81841025000904,
+        "feasible": true,
+        "obj1": 5406.0,
+        "obj2": 2180,
+        "obj3": 5326.0,
+        "objective": 73680358.0,
+        "problem": "prob_38",
+        "timelimit": 240.0,
+        "violations": []
+      },
+      "delta_pct": 0.33653019199086603,
+      "instance": 38
+    },
+    {
+      "baseline": {
+        "elapsed": 231.6380038329953,
+        "feasible": true,
+        "obj1": 6054.0,
+        "obj2": 4344,
+        "obj3": 9062.0,
+        "objective": 4160168.0,
+        "problem": "prob_40",
+        "timelimit": 240.0,
+        "violations": []
+      },
+      "candidate": {
+        "elapsed": 229.87445041700266,
+        "feasible": true,
+        "obj1": 6132.0,
+        "obj2": 2658,
+        "obj3": 10119.0,
+        "objective": 4224249.0,
+        "problem": "prob_40",
+        "timelimit": 240.0,
+        "violations": []
+      },
+      "delta_pct": 1.5403464475473105,
+      "instance": 40
+    }
+  ],
+  "timelimit": 240.0
+}

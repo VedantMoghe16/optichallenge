@@ -1,0 +1,13 @@
+{
+ "prob": "/tmp/bench/edges/edge_zeroslack.json",
+ "name": "edge_zeroslack",
+ "timelimit": 30.0,
+ "elapsed": 28.23,
+ "feasible": true,
+ "stage": 5,
+ "objective": 3690.0,
+ "obj1": 0.0,
+ "obj2": 144,
+ "obj3": 15.0,
+ "violations": []
+}

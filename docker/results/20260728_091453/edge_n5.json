@@ -1,0 +1,13 @@
+{
+ "prob": "/tmp/bench/edges/edge_n5.json",
+ "name": "edge_n5",
+ "timelimit": 30.0,
+ "elapsed": 28.8,
+ "feasible": true,
+ "stage": 5,
+ "objective": 3150.0,
+ "obj1": 0.0,
+ "obj2": 450,
+ "obj3": 0.0,
+ "violations": []
+}

@@ -267,6 +267,10 @@ def run_case(inst, timelimit, workdir):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--minutes", type=float, default=60)
+    ap.add_argument(
+        "--cases", type=int,
+        help="optional exact case limit for a bounded smoke run",
+    )
     ap.add_argument("--lane", default="A")
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--solver-dir", type=Path,
@@ -287,7 +291,10 @@ def main():
             (args.solver_dir / "myalgorithm.py").read_text())
         (workdir / "utils.py").write_text(
             (args.utils_dir / "utils.py").read_text())
-        while time.time() < end:
+        while (
+            time.time() < end
+            and (args.cases is None or i < max(0, args.cases))
+        ):
             i += 1
             inst, profile = make_instance(rng, f"{args.lane}{i}")
             n = len(inst["blocks"])

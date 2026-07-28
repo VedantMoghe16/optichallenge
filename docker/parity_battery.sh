@@ -11,11 +11,12 @@ BENCH=/tmp/bench
 RESULTS=/results
 LOOSE="$REPO/train 2"      # prob_1..20  (loose)
 CONG="$REPO/train"         # prob_21..40 (congested)
+SOLVER_SOURCE="${OGC_SOLVER_SOURCE:-$REPO/submission/myalgorithm.py}"
 
 mkdir -p "$BENCH" "$RESULTS"
 
 # ---- stage the bench: solver + official checker + driver ----------------------
-cp "$REPO/submission/myalgorithm.py" "$BENCH/myalgorithm.py"
+cp "$SOLVER_SOURCE"                    "$BENCH/myalgorithm.py"
 cp "$REPO/ogc2026/baseline/utils.py" "$BENCH/utils.py"
 cp /work/parity_driver.py            "$BENCH/driver.py"
 cp /work/gen_edge_cases.py           "$BENCH/gen_edge_cases.py"
@@ -82,7 +83,7 @@ run_case tl30 "$LOOSE/prob_20.json" 30
 # ---- (d) fork-specific: SIGKILL one portfolio worker mid-run -------------------
 # Parent must still return a checker-feasible dict (dead-worker resilience).
 echo "== case killtest  (prob_20 @ 60s, kill -9 one worker at t=15s)"
-( cd "$BENCH" && timeout -k 10 150 python3 driver.py "$LOOSE/prob_20.json" 60 "$RESULTS/killtest.json" ) &
+( cd "$BENCH" && exec python3 driver.py "$LOOSE/prob_20.json" 60 "$RESULTS/killtest.json" ) &
 DRIVER_PID=$!
 sleep 15
 KIDS="$(pgrep -P "$DRIVER_PID" 2>/dev/null || true)"
@@ -94,6 +95,13 @@ if [ -n "${WORKER:-}" ]; then
 else
     echo "   WARN: no child process found at t=15s (portfolio not up yet?)"
     printf '{"note": "no worker child found at t=15s; kill not performed"}\n' > "$RESULTS/killtest_meta.json"
+fi
+for _ in $(seq 1 90); do
+    kill -0 "$DRIVER_PID" 2>/dev/null || break
+    sleep 1
+done
+if kill -0 "$DRIVER_PID" 2>/dev/null; then
+    kill -9 "$DRIVER_PID" 2>/dev/null || true
 fi
 wait "$DRIVER_PID"
 RC=$?

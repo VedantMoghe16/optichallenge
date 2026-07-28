@@ -1,0 +1,51 @@
+{
+  "baseline_sha256": "5e852f1631e377a6b8f3cfaf69c5eb26b5091b7c621b96cec637cb71a6d42061",
+  "baseline_total": 24229165.0,
+  "candidate_infeasible": [],
+  "candidate_sha256": "6a108903a2babe87fc2a54a659b075b85a9dfe82ac8a878e14a55c30ee29c4cf",
+  "candidate_total": 19214476.0,
+  "cp_sat": false,
+  "created_utc": "20260728T010703Z",
+  "delta_pct": -20.69691217175664,
+  "explained_regressions": [],
+  "git_head": "f116296cbe0f97061353eeb6f34e39ae3f56e1e2",
+  "instances": [
+    39
+  ],
+  "instances_over_plus_2_pct": [],
+  "loose_polish": true,
+  "passes_aggregate_gate": true,
+  "passes_full_gate": true,
+  "platform": "macOS-26.5.2-arm64-arm-64bit",
+  "python": "3.12.11 | packaged by Anaconda, Inc. | (main, Jun  5 2025, 08:03:38) [Clang 14.0.6 ]",
+  "raster": true,
+  "rows": [
+    {
+      "baseline": {
+        "elapsed": 229.6512682080065,
+        "feasible": true,
+        "obj1": 1749.0,
+        "obj2": 1612,
+        "obj3": 6022.0,
+        "objective": 24229165.0,
+        "problem": "prob_39",
+        "timelimit": 240.0,
+        "violations": []
+      },
+      "candidate": {
+        "elapsed": 229.68628650000028,
+        "feasible": true,
+        "obj1": 1366.0,
+        "obj2": 612,
+        "obj3": 6661.0,
+        "objective": 19214476.0,
+        "problem": "prob_39",
+        "timelimit": 240.0,
+        "violations": []
+      },
+      "delta_pct": -20.69691217175664,
+      "instance": 39
+    }
+  ],
+  "timelimit": 240.0
+}

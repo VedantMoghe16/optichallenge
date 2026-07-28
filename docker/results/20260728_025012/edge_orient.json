@@ -1,0 +1,13 @@
+{
+ "prob": "/tmp/bench/edges/edge_orient.json",
+ "name": "edge_orient",
+ "timelimit": 30.0,
+ "elapsed": 28.24,
+ "feasible": true,
+ "stage": 5,
+ "objective": 5030.0,
+ "obj1": 0.0,
+ "obj2": 68,
+ "obj3": 29.0,
+ "violations": []
+}

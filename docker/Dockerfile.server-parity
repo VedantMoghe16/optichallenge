@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # venv so pip versions are exact and isolated from the distro python
 RUN python3 -m venv /opt/venv \
     && /opt/venv/bin/pip install --no-cache-dir --upgrade pip \
-    && /opt/venv/bin/pip install --no-cache-dir shapely==2.1.2 numpy
+    && /opt/venv/bin/pip install --no-cache-dir shapely==2.1.2 numpy scipy
 
 ENV PATH="/opt/venv/bin:${PATH}"
 

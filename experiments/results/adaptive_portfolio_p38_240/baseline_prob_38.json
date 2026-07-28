@@ -1,0 +1,11 @@
+{
+  "elapsed": 229.78751616699446,
+  "feasible": true,
+  "obj1": 5209.0,
+  "obj2": 1272,
+  "obj3": 4540.0,
+  "objective": 70816141.0,
+  "problem": "prob_38",
+  "timelimit": 240.0,
+  "violations": []
+}

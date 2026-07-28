@@ -1,0 +1,13 @@
+{
+ "prob": "/tmp/bench/edges/edge_w1zero.json",
+ "name": "edge_w1zero",
+ "timelimit": 30.0,
+ "elapsed": 28.23,
+ "feasible": true,
+ "stage": 5,
+ "objective": 36788.0,
+ "obj1": 99.0,
+ "obj2": 2534,
+ "obj3": 127.0,
+ "violations": []
+}

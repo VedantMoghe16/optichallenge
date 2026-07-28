@@ -1,0 +1,13 @@
+{
+ "prob": "/repo/train/prob_35.json",
+ "name": "prob_35",
+ "timelimit": 60.0,
+ "elapsed": 56.46,
+ "feasible": true,
+ "stage": 5,
+ "objective": 5192530.0,
+ "obj1": 355.0,
+ "obj2": 213,
+ "obj3": 3055.0,
+ "violations": []
+}

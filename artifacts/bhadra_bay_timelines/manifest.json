@@ -1,0 +1,406 @@
+{
+  "schema": "bhadra-bay-replay-manifest-v1",
+  "solver_sha256": "34c81f3698985561642cf771b10039df9825d8392cc5e2273ca846b5f02a488f",
+  "cases": [
+    {
+      "problem": "prob_1",
+      "gif": "prob_1_bay_timeline.gif",
+      "gif_bytes": 1364354,
+      "frames": 53,
+      "horizon": 52,
+      "objective": 1499.0,
+      "elapsed": 56.79554050001025,
+      "feasible": true
+    },
+    {
+      "problem": "prob_2",
+      "gif": "prob_2_bay_timeline.gif",
+      "gif_bytes": 1446504,
+      "frames": 54,
+      "horizon": 53,
+      "objective": 3690.0,
+      "elapsed": 56.816997666988755,
+      "feasible": true
+    },
+    {
+      "problem": "prob_3",
+      "gif": "prob_3_bay_timeline.gif",
+      "gif_bytes": 1443746,
+      "frames": 56,
+      "horizon": 55,
+      "objective": 56890.0,
+      "elapsed": 56.887067499992554,
+      "feasible": true
+    },
+    {
+      "problem": "prob_4",
+      "gif": "prob_4_bay_timeline.gif",
+      "gif_bytes": 1514087,
+      "frames": 65,
+      "horizon": 64,
+      "objective": 16916.0,
+      "elapsed": 56.918986582997604,
+      "feasible": true
+    },
+    {
+      "problem": "prob_5",
+      "gif": "prob_5_bay_timeline.gif",
+      "gif_bytes": 1834371,
+      "frames": 72,
+      "horizon": 86,
+      "objective": 61275.0,
+      "elapsed": 56.809935166995274,
+      "feasible": true
+    },
+    {
+      "problem": "prob_6",
+      "gif": "prob_6_bay_timeline.gif",
+      "gif_bytes": 1492806,
+      "frames": 54,
+      "horizon": 53,
+      "objective": 73824.0,
+      "elapsed": 56.81447512500745,
+      "feasible": true
+    },
+    {
+      "problem": "prob_7",
+      "gif": "prob_7_bay_timeline.gif",
+      "gif_bytes": 1872782,
+      "frames": 72,
+      "horizon": 80,
+      "objective": 55663.0,
+      "elapsed": 56.8210405419959,
+      "feasible": true
+    },
+    {
+      "problem": "prob_8",
+      "gif": "prob_8_bay_timeline.gif",
+      "gif_bytes": 1585162,
+      "frames": 72,
+      "horizon": 134,
+      "objective": 11252.0,
+      "elapsed": 56.824289290991146,
+      "feasible": true
+    },
+    {
+      "problem": "prob_9",
+      "gif": "prob_9_bay_timeline.gif",
+      "gif_bytes": 1888220,
+      "frames": 72,
+      "horizon": 102,
+      "objective": 50885.0,
+      "elapsed": 56.83047320898913,
+      "feasible": true
+    },
+    {
+      "problem": "prob_10",
+      "gif": "prob_10_bay_timeline.gif",
+      "gif_bytes": 2087833,
+      "frames": 72,
+      "horizon": 98,
+      "objective": 73661.0,
+      "elapsed": 56.81757404199743,
+      "feasible": true
+    },
+    {
+      "problem": "prob_11",
+      "gif": "prob_11_bay_timeline.gif",
+      "gif_bytes": 1977899,
+      "frames": 66,
+      "horizon": 65,
+      "objective": 52955.0,
+      "elapsed": 56.880889207997825,
+      "feasible": true
+    },
+    {
+      "problem": "prob_12",
+      "gif": "prob_12_bay_timeline.gif",
+      "gif_bytes": 2182287,
+      "frames": 70,
+      "horizon": 69,
+      "objective": 95529.0,
+      "elapsed": 56.900300499997684,
+      "feasible": true
+    },
+    {
+      "problem": "prob_13",
+      "gif": "prob_13_bay_timeline.gif",
+      "gif_bytes": 2170446,
+      "frames": 72,
+      "horizon": 77,
+      "objective": 119955.0,
+      "elapsed": 57.112936374993296,
+      "feasible": true
+    },
+    {
+      "problem": "prob_14",
+      "gif": "prob_14_bay_timeline.gif",
+      "gif_bytes": 2277649,
+      "frames": 72,
+      "horizon": 80,
+      "objective": 95407.0,
+      "elapsed": 56.959685875001014,
+      "feasible": true
+    },
+    {
+      "problem": "prob_15",
+      "gif": "prob_15_bay_timeline.gif",
+      "gif_bytes": 2199424,
+      "frames": 72,
+      "horizon": 96,
+      "objective": 43165.0,
+      "elapsed": 56.83937687499565,
+      "feasible": true
+    },
+    {
+      "problem": "prob_16",
+      "gif": "prob_16_bay_timeline.gif",
+      "gif_bytes": 2031859,
+      "frames": 72,
+      "horizon": 149,
+      "objective": 48048.0,
+      "elapsed": 56.86728387500625,
+      "feasible": true
+    },
+    {
+      "problem": "prob_17",
+      "gif": "prob_17_bay_timeline.gif",
+      "gif_bytes": 2042999,
+      "frames": 72,
+      "horizon": 140,
+      "objective": 57857.0,
+      "elapsed": 56.84003795799799,
+      "feasible": true
+    },
+    {
+      "problem": "prob_18",
+      "gif": "prob_18_bay_timeline.gif",
+      "gif_bytes": 2325520,
+      "frames": 72,
+      "horizon": 105,
+      "objective": 62135.0,
+      "elapsed": 56.94271479200688,
+      "feasible": true
+    },
+    {
+      "problem": "prob_19",
+      "gif": "prob_19_bay_timeline.gif",
+      "gif_bytes": 2093512,
+      "frames": 72,
+      "horizon": 126,
+      "objective": 61975.0,
+      "elapsed": 56.90100783399248,
+      "feasible": true
+    },
+    {
+      "problem": "prob_20",
+      "gif": "prob_20_bay_timeline.gif",
+      "gif_bytes": 2058512,
+      "frames": 59,
+      "horizon": 58,
+      "objective": 305288.0,
+      "elapsed": 56.87398958299309,
+      "feasible": true
+    },
+    {
+      "problem": "prob_21",
+      "gif": "prob_21_bay_timeline.gif",
+      "gif_bytes": 2060418,
+      "frames": 72,
+      "horizon": 89,
+      "objective": 1196330.0,
+      "elapsed": 56.86713633300678,
+      "feasible": true
+    },
+    {
+      "problem": "prob_22",
+      "gif": "prob_22_bay_timeline.gif",
+      "gif_bytes": 1516851,
+      "frames": 63,
+      "horizon": 62,
+      "objective": 918140.0,
+      "elapsed": 56.86516220800695,
+      "feasible": true
+    },
+    {
+      "problem": "prob_23",
+      "gif": "prob_23_bay_timeline.gif",
+      "gif_bytes": 1982549,
+      "frames": 72,
+      "horizon": 81,
+      "objective": 3814626.0,
+      "elapsed": 57.479630000001634,
+      "feasible": true
+    },
+    {
+      "problem": "prob_24",
+      "gif": "prob_24_bay_timeline.gif",
+      "gif_bytes": 2160875,
+      "frames": 72,
+      "horizon": 73,
+      "objective": 522640.0,
+      "elapsed": 57.43319700000575,
+      "feasible": true
+    },
+    {
+      "problem": "prob_25",
+      "gif": "prob_25_bay_timeline.gif",
+      "gif_bytes": 2060559,
+      "frames": 72,
+      "horizon": 95,
+      "objective": 351265.0,
+      "elapsed": 56.89420787499694,
+      "feasible": true
+    },
+    {
+      "problem": "prob_26",
+      "gif": "prob_26_bay_timeline.gif",
+      "gif_bytes": 2233063,
+      "frames": 72,
+      "horizon": 93,
+      "objective": 13937342.0,
+      "elapsed": 56.900328625008115,
+      "feasible": true
+    },
+    {
+      "problem": "prob_27",
+      "gif": "prob_27_bay_timeline.gif",
+      "gif_bytes": 2062717,
+      "frames": 72,
+      "horizon": 133,
+      "objective": 35113516.0,
+      "elapsed": 56.87933699999121,
+      "feasible": true
+    },
+    {
+      "problem": "prob_28",
+      "gif": "prob_28_bay_timeline.gif",
+      "gif_bytes": 2286869,
+      "frames": 72,
+      "horizon": 78,
+      "objective": 2614435.0,
+      "elapsed": 56.87537608300045,
+      "feasible": true
+    },
+    {
+      "problem": "prob_29",
+      "gif": "prob_29_bay_timeline.gif",
+      "gif_bytes": 2031758,
+      "frames": 63,
+      "horizon": 62,
+      "objective": 604238.0,
+      "elapsed": 57.4267319579958,
+      "feasible": true
+    },
+    {
+      "problem": "prob_30",
+      "gif": "prob_30_bay_timeline.gif",
+      "gif_bytes": 2009687,
+      "frames": 70,
+      "horizon": 69,
+      "objective": 4994360.0,
+      "elapsed": 57.42717333299515,
+      "feasible": true
+    },
+    {
+      "problem": "prob_31",
+      "gif": "prob_31_bay_timeline.gif",
+      "gif_bytes": 2677943,
+      "frames": 72,
+      "horizon": 113,
+      "objective": 16747781.0,
+      "elapsed": 57.05089799998677,
+      "feasible": true
+    },
+    {
+      "problem": "prob_32",
+      "gif": "prob_32_bay_timeline.gif",
+      "gif_bytes": 2231243,
+      "frames": 72,
+      "horizon": 95,
+      "objective": 6156440.0,
+      "elapsed": 57.08091824999428,
+      "feasible": true
+    },
+    {
+      "problem": "prob_33",
+      "gif": "prob_33_bay_timeline.gif",
+      "gif_bytes": 2267588,
+      "frames": 72,
+      "horizon": 122,
+      "objective": 17390456.0,
+      "elapsed": 58.10023762501078,
+      "feasible": true
+    },
+    {
+      "problem": "prob_34",
+      "gif": "prob_34_bay_timeline.gif",
+      "gif_bytes": 2637445,
+      "frames": 72,
+      "horizon": 86,
+      "objective": 2479908.0,
+      "elapsed": 58.0523249580001,
+      "feasible": true
+    },
+    {
+      "problem": "prob_35",
+      "gif": "prob_35_bay_timeline.gif",
+      "gif_bytes": 2271823,
+      "frames": 72,
+      "horizon": 73,
+      "objective": 5590828.0,
+      "elapsed": 57.53226012499363,
+      "feasible": true
+    },
+    {
+      "problem": "prob_36",
+      "gif": "prob_36_bay_timeline.gif",
+      "gif_bytes": 2629092,
+      "frames": 71,
+      "horizon": 70,
+      "objective": 408702.0,
+      "elapsed": 57.670789374999,
+      "feasible": true
+    },
+    {
+      "problem": "prob_37",
+      "gif": "prob_37_bay_timeline.gif",
+      "gif_bytes": 2212135,
+      "frames": 72,
+      "horizon": 92,
+      "objective": 7092045.0,
+      "elapsed": 57.063597957996535,
+      "feasible": true
+    },
+    {
+      "problem": "prob_38",
+      "gif": "prob_38_bay_timeline.gif",
+      "gif_bytes": 2461708,
+      "frames": 72,
+      "horizon": 158,
+      "objective": 74434006.0,
+      "elapsed": 57.03223316700314,
+      "feasible": true
+    },
+    {
+      "problem": "prob_39",
+      "gif": "prob_39_bay_timeline.gif",
+      "gif_bytes": 2312887,
+      "frames": 72,
+      "horizon": 97,
+      "objective": 26346985.0,
+      "elapsed": 57.59460066599422,
+      "feasible": true
+    },
+    {
+      "problem": "prob_40",
+      "gif": "prob_40_bay_timeline.gif",
+      "gif_bytes": 2674260,
+      "frames": 72,
+      "horizon": 159,
+      "objective": 4389964.0,
+      "elapsed": 57.61951879199478,
+      "feasible": true
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+ "prob": "/tmp/bench/edges/edge_n600.json",
+ "name": "edge_n600",
+ "timelimit": 60.0,
+ "elapsed": 56.47,
+ "feasible": true,
+ "stage": 5,
+ "objective": 968179.0,
+ "obj1": 34.0,
+ "obj2": 7568,
+ "obj3": 4573.0,
+ "violations": []
+}

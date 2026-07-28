@@ -1,0 +1,159 @@
+{
+  "baseline_sha256": "5e852f1631e377a6b8f3cfaf69c5eb26b5091b7c621b96cec637cb71a6d42061",
+  "baseline_total": 107794454.0,
+  "candidate_infeasible": [],
+  "candidate_sha256": "6a108903a2babe87fc2a54a659b075b85a9dfe82ac8a878e14a55c30ee29c4cf",
+  "candidate_total": 93508780.0,
+  "cp_sat": false,
+  "created_utc": "20260728T000034Z",
+  "delta_pct": -13.25269851081578,
+  "explained_regressions": [],
+  "git_head": "f116296cbe0f97061353eeb6f34e39ae3f56e1e2",
+  "instances": [
+    32,
+    34,
+    38,
+    39,
+    40
+  ],
+  "instances_over_plus_2_pct": [],
+  "loose_polish": true,
+  "passes_aggregate_gate": true,
+  "passes_full_gate": true,
+  "platform": "macOS-26.5.2-arm64-arm-64bit",
+  "python": "3.12.11 | packaged by Anaconda, Inc. | (main, Jun  5 2025, 08:03:38) [Clang 14.0.6 ]",
+  "raster": true,
+  "rows": [
+    {
+      "baseline": {
+        "elapsed": 229.7364892080077,
+        "feasible": true,
+        "obj1": 1148.0,
+        "obj2": 1209,
+        "obj3": 1386.0,
+        "objective": 4663929.0,
+        "problem": "prob_32",
+        "timelimit": 240.0,
+        "violations": []
+      },
+      "candidate": {
+        "elapsed": 229.78433400001086,
+        "feasible": true,
+        "obj1": 1148.0,
+        "obj2": 1209,
+        "obj3": 1386.0,
+        "objective": 4663929.0,
+        "problem": "prob_32",
+        "timelimit": 240.0,
+        "violations": []
+      },
+      "delta_pct": 0.0,
+      "instance": 32
+    },
+    {
+      "baseline": {
+        "elapsed": 229.73836641699017,
+        "feasible": true,
+        "obj1": 565.0,
+        "obj2": 2080,
+        "obj3": 801.0,
+        "objective": 2324638.0,
+        "problem": "prob_34",
+        "timelimit": 240.0,
+        "violations": []
+      },
+      "candidate": {
+        "elapsed": 229.73883070900047,
+        "feasible": true,
+        "obj1": 565.0,
+        "obj2": 2080,
+        "obj3": 801.0,
+        "objective": 2324638.0,
+        "problem": "prob_34",
+        "timelimit": 240.0,
+        "violations": []
+      },
+      "delta_pct": 0.0,
+      "instance": 34
+    },
+    {
+      "baseline": {
+        "elapsed": 229.75807879200147,
+        "feasible": true,
+        "obj1": 5320.0,
+        "obj2": 1084,
+        "obj3": 5237.0,
+        "objective": 72504828.0,
+        "problem": "prob_38",
+        "timelimit": 240.0,
+        "violations": []
+      },
+      "candidate": {
+        "elapsed": 229.6787788340007,
+        "feasible": true,
+        "obj1": 4621.0,
+        "obj2": 4116,
+        "obj3": 5373.0,
+        "objective": 63231925.0,
+        "problem": "prob_38",
+        "timelimit": 240.0,
+        "violations": []
+      },
+      "delta_pct": -12.789359351352436,
+      "instance": 38
+    },
+    {
+      "baseline": {
+        "elapsed": 229.66373549999844,
+        "feasible": true,
+        "obj1": 1749.0,
+        "obj2": 1612,
+        "obj3": 6022.0,
+        "objective": 24229165.0,
+        "problem": "prob_39",
+        "timelimit": 240.0,
+        "violations": []
+      },
+      "candidate": {
+        "elapsed": 229.6817138750048,
+        "feasible": true,
+        "obj1": 1366.0,
+        "obj2": 612,
+        "obj3": 6661.0,
+        "objective": 19214476.0,
+        "problem": "prob_39",
+        "timelimit": 240.0,
+        "violations": []
+      },
+      "delta_pct": -20.69691217175664,
+      "instance": 39
+    },
+    {
+      "baseline": {
+        "elapsed": 229.79900195798837,
+        "feasible": true,
+        "obj1": 5922.0,
+        "obj2": 4153,
+        "obj3": 9059.0,
+        "objective": 4071894.0,
+        "problem": "prob_40",
+        "timelimit": 240.0,
+        "violations": []
+      },
+      "candidate": {
+        "elapsed": 229.8103878749971,
+        "feasible": true,
+        "obj1": 5927.0,
+        "obj2": 4244,
+        "obj3": 8943.0,
+        "objective": 4073812.0,
+        "problem": "prob_40",
+        "timelimit": 240.0,
+        "violations": []
+      },
+      "delta_pct": 0.04710338726892203,
+      "instance": 40
+    }
+  ],
+  "timelimit": 240.0
+}
